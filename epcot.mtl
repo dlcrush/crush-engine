@@ -1,0 +1,11 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl FrontColorNoCulling
+Ns 0
+Ka 1.000000 1.000000 1.000000
+Kd 0.5 0.5 0.5
+Ks 1.0 1.0 1.0
+Ni 1.000000
+d 1.000000
+illum 2
