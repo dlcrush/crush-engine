@@ -7,6 +7,7 @@
 #include <GL/glfw.h>
 #include <string>
 #include <vector>
+#include "material.h"
 
 void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, int begin, int end);
 
@@ -23,6 +24,7 @@ private:
 	std::vector<GLuint> vertex_id, normal_id;
 	std::vector<int> materialIDs;
 	std::vector<int> material_vertex_map;
+	std::vector<Material> materials;
 
 public:
 	
@@ -53,7 +55,7 @@ public:
 	// an array of vertices. color_buffer_id is a valid buffer binded to an
 	// array of colors.
 	// POST: The model has been drawn to the screen. 
-	void draw();
+	void draw(GLuint program_id);
 
 	void clear();
 };

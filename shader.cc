@@ -121,7 +121,7 @@ int main(int argc, char * argv[]) {
       light.set_position(-y_rot2, x_rot2, 2.0f);
       light.activate(program_id);
 
-      model.draw();
+      model.draw(program_id);
 
       // Swap buffers
       glfwSwapBuffers();

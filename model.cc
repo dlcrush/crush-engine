@@ -161,7 +161,7 @@ void Model::load(string objFileName, GLuint program_id) {
   vector<GLfloat> vertices;
   vector<GLfloat> vn;
   vector<GLfloat> normals;
-  vector<Material> materials;
+  // vector<Material> materials;
 
   /* Delete existing buffers, if any. */
   for (int i = 0; i < vertex_buffer_id.size(); i ++) {
@@ -313,24 +313,24 @@ void Model::load(string objFileName, GLuint program_id) {
       }
       //glBufferData(GL_ARRAY_BUFFER, buffer_size, normalArray, GL_STATIC_DRAW);
 
-      Material * material = &(materials.at(i));
+      // Material * material = &(materials.at(i));
 
-      GLfloat * Ka = material->get_Ka();
-      GLfloat * Kd = material->get_Kd();
-      GLfloat * Ks = material->get_Ks();
-      GLfloat Ns = material->get_Ns();
+      // GLfloat * Ka = material->get_Ka();
+      // GLfloat * Kd = material->get_Kd();
+      // GLfloat * Ks = material->get_Ks();
+      // GLfloat Ns = material->get_Ns();
 
-      GLuint attenuation_amount_id = glGetUniformLocation(program_id,
-        "attenuation_amount");
-      glUniform1f(attenuation_amount_id, 1.0f); 
-      GLuint ambient_id = glGetUniformLocation(program_id, "ambient_color_4f");
-      glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
-      GLuint diffuse_id = glGetUniformLocation(program_id, "diffuse_color_4f");
-      glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
-      GLuint specular_id = glGetUniformLocation(program_id, "specular_color_4f");
-      glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
-      GLuint specular_coefficient_id = glGetUniformLocation(program_id, "specular_coefficient_1f");
-      glUniform1f(specular_coefficient_id, Ns);
+      // GLuint attenuation_amount_id = glGetUniformLocation(program_id,
+      //   "attenuation_amount");
+      // glUniform1f(attenuation_amount_id, 1.0f); 
+      // GLuint ambient_id = glGetUniformLocation(program_id, "ambient_color_4f");
+      // glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
+      // GLuint diffuse_id = glGetUniformLocation(program_id, "diffuse_color_4f");
+      // glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
+      // GLuint specular_id = glGetUniformLocation(program_id, "specular_color_4f");
+      // glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
+      // GLuint specular_coefficient_id = glGetUniformLocation(program_id, "specular_coefficient_1f");
+      // glUniform1f(specular_coefficient_id, Ns);
 
       // Set shader attribute variables
       vertex_id.push_back(glGetAttribLocation(program_id, "vertex_3f"));
@@ -338,6 +338,17 @@ void Model::load(string objFileName, GLuint program_id) {
 
       delete[] verticeArray;
       delete[] normalArray;
+
+      for (int i = 0; i < vertex_id.size(); i ++) {
+        cout << material_vertex_map.at(i) << endl;
+      }
+
+      cout << number_of_vertices << endl;
+
+      cout << vertex_id.size() << endl;
+      cout << normal_id.size() << endl;
+      cout << vertex_buffer_id.size() << endl;
+      cout << normal_buffer_id.size() << endl;
     }
   }
 }
@@ -346,16 +357,60 @@ void Model::load(string objFileName, GLuint program_id) {
 // an array of vertices. color_buffer_id is a valid buffer binded to an
 // array of colors.
 // POST: The model has been drawn to the screen. 
-void Model::draw() {
+void Model::draw(GLuint program_id) {
   
   for (int i = 0; i < vertex_id.size(); i ++) {
+
+    int current_material_id = materialIDs.at(i);
+
+    Material * material = &(materials.at(current_material_id));
+
+    GLfloat * Ka = material->get_Ka();
+    GLfloat * Kd = material->get_Kd();
+    GLfloat * Ks = material->get_Ks();
+    GLfloat Ns = material->get_Ns();
+
+    GLuint attenuation_amount_id = glGetUniformLocation(program_id,
+      "attenuation_amount");
+    //glUniform1f(attenuation_amount_id, 1.0f);
+
+    int size = 0;
+
+    if (vertex_id.size() < 2) {
+      size = number_of_vertices / FLOATS_PER_VERTEX;
+    }
+    else {
+      if (i == 0) {
+        size = material_vertex_map.at(i + 1) + 1;
+      }
+      else if ((i + 1) < vertex_id.size()) {
+        size = material_vertex_map.at(i + 1) - material_vertex_map.at(i);
+      }
+      else {
+        size = (number_of_vertices) - material_vertex_map.at(i) - 1;
+      }
+    }
+
+    size /= FLOATS_PER_VERTEX;
+
+    //cout << size << endl;
+
+    GLuint ambient_id = glGetUniformLocation(program_id, "ambient_color_4f");
+    glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
+    GLuint diffuse_id = glGetUniformLocation(program_id, "diffuse_color_4f");
+    glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
+    GLuint specular_id = glGetUniformLocation(program_id, "specular_color_4f");
+    glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
+    GLuint specular_coefficient_id = glGetUniformLocation(program_id, "specular_coefficient_1f");
+    glUniform1f(specular_coefficient_id, Ns);
+
     glEnableVertexAttribArray(vertex_id.at(i));
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
     glVertexAttribPointer(vertex_id.at(i), 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(normal_id.at(i));
     glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
     glVertexAttribPointer(normal_id.at(i), 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glDrawArrays(GL_TRIANGLES, 0, number_of_vertices / FLOATS_PER_VERTEX);
+    glDrawArrays(GL_TRIANGLES, 0, size);
     //glDrawArrays(GL_TRIANGLES, 0, 18);
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
