@@ -9,6 +9,7 @@
 #include <vector>
 #include "material.h"
 
+void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, std::vector<int> mapping, int i);
 void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, int begin, int end);
 
 class Model {

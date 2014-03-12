@@ -22,7 +22,7 @@
 using namespace std;
 
 // handles processing for user input
-void process_input(float & x_rot, float & y_rot, float delta_rot) {
+void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2, float & y_rot2, float delta_rot2, Light light, GLuint program_id) {
   // Handle user input
   if (glfwGetKey(GLFW_KEY_UP) == GLFW_PRESS) {
     x_rot += delta_rot;
@@ -36,6 +36,22 @@ void process_input(float & x_rot, float & y_rot, float delta_rot) {
   if (glfwGetKey(GLFW_KEY_RIGHT) == GLFW_PRESS) {
     y_rot -= delta_rot;
   }
+
+  if (glfwGetKey(GLFW_KEY_W) == GLFW_PRESS) {
+    x_rot2 += delta_rot2;
+  }
+  if (glfwGetKey(GLFW_KEY_S) == GLFW_PRESS) {
+    x_rot2 -= delta_rot2;
+  }
+  if (glfwGetKey(GLFW_KEY_A) == GLFW_PRESS) {
+    y_rot2 += delta_rot2;
+  }
+  if (glfwGetKey(GLFW_KEY_D) == GLFW_PRESS) {
+    y_rot2 -= delta_rot2;
+  }
+
+  light.set_position(-y_rot2, x_rot2, 1.0f);
+  light.activate(program_id);
 }
 
 // Handles the processing for the current view
@@ -88,11 +104,7 @@ int main(int argc, char * argv[]) {
   Model model;
   Window window(640,480,"shader");
 
-  cout << "program id: " << program_id << endl;
-
   window.set_up_shaders("phong.vert", "phong.frag", program_id);
-
-  cout << "program id: " << program_id << endl;
 
   model.load(fileToLoad, program_id);
   Light light(program_id);
@@ -102,24 +114,8 @@ int main(int argc, char * argv[]) {
   light.activate(program_id);
 
   do {
-      process_input(x_rot, y_rot, delta_rot);
+      process_input(x_rot, y_rot, delta_rot, x_rot2, y_rot2, delta_rot2, light, program_id);
       process_view(x_rot, y_rot);
-
-      if (glfwGetKey(GLFW_KEY_W) == GLFW_PRESS) {
-        x_rot2 += delta_rot2;
-      }
-      if (glfwGetKey(GLFW_KEY_S) == GLFW_PRESS) {
-        x_rot2 -= delta_rot2;
-      }
-      if (glfwGetKey(GLFW_KEY_A) == GLFW_PRESS) {
-        y_rot2 += delta_rot2;
-      }
-      if (glfwGetKey(GLFW_KEY_D) == GLFW_PRESS) {
-        y_rot2 -= delta_rot2;
-      }
-
-      light.set_position(-y_rot2, x_rot2, 1.0f);
-      light.activate(program_id);
 
       model.draw(program_id);
 
