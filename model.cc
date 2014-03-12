@@ -143,8 +143,6 @@ void loadMtlFile(string mtlFile, vector<Material> & materials) {
 // number_of_vertices has been allocated space.
 Model::Model() {
   // do nothing
-  //vertex_buffer_id = 0;
-  //normal_buffer_id = 0;
 }
 
 // PRE:
@@ -152,13 +150,7 @@ Model::Model() {
 // color_buffer_id has been allocated space,
 // number_of_vertices has been allocated space.
 Model::~Model() {
-  // delete buffers, if any
-  for (int i = 0; i < vertex_buffer_id.size(); i ++) {
-    glDeleteBuffers(1, &vertex_buffer_id.at(i));
-    glDeleteBuffers(1, &normal_buffer_id.at(i));
-  }
-  //glDeleteBuffers(1, &vertex_buffer_id);
-  //glDeleteBuffers(1, &normal_buffer_id);
+  clear();
 }
 
 // PRE: vertices has been defined, points has been defined,
