@@ -67,6 +67,8 @@ public:
 	}
 
 	// sets up the shader programs
+	// NOTE: vertex_shader should be the name of a valid vertex shader file
+	// NOTE: fragment_shader should be the name of a valid fragment shader file
 	void set_up_shaders(string vertex_shader, string fragment_shader, 
 		GLuint & program_id) {
 

@@ -20,15 +20,26 @@ private:
 	static GLuint program_id;
 public:
 
+	// constructor
+	// NOTE: program_id should be defined
 	Light(GLuint program_id);
 
+	// updates position of light
+	// NOTE: 0.0 <= x,y,z <= 1.0
 	void set_position(GLfloat x, GLfloat y, GLfloat z);
 
+	// updates color of light
+	// NOTE: 0.0 <= r,g,b <= 1.0
 	void set_color(GLfloat r, GLfloat g, GLfloat b);
 
+	// updates attenuation amount of light
+	// NOTE factor >= 0.0
 	void set_attenuation(GLfloat factor);
 
-	void activate(GLuint program_id);
+	// activates the light. Only one light can be activated at a time.
+	// If a light is already activated, this call replaces the current
+	// active light.
+	void activate();
 
 };
 

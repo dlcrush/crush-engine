@@ -16,36 +16,45 @@ using namespace std;
 // Copies values in source vector to destination array
 // NOTE: destination needs to be allocated space before function call
 // NOTE: i should be a positive integer (or 0) and i < mapping.size()
-void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, vector<int> mapping, int i) {
+void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, 
+  vector<int> mapping, int i) {
   if ((i + 1) < mapping.size()) {
       // We aren't at the last element in the source.
       if (i == 0) {
         // initial element in source, start at 0.
-        copyVectorToArray(source, destination, mapping.at(i), mapping.at(i + 1) + 1);
+        copyVectorToArray(source, destination, mapping.at(i), 
+          mapping.at(i + 1) + 1);
       }
       else {
-        // not initial element in source, increment starting position by 1
-        copyVectorToArray(source, destination, mapping.at(i) + 1, mapping.at(i + 1) + 1);
+        // not initial element in source, increment starting position 
+        // by 1
+        copyVectorToArray(source, destination, mapping.at(i) + 1, 
+          mapping.at(i + 1) + 1);
       }
     }
     else {
       // We are at the last element in the source.
       if (i == 0) {
         // initial element in source, start at 0
-        copyVectorToArray(source, destination, mapping.at(i), source.size());
+        copyVectorToArray(source, destination, mapping.at(i), 
+          source.size());
       }
       else {
-        // not initial element in source, increment starting position by 1
-        copyVectorToArray(source, destination, mapping.at(i) + 1, source.size());
+        // not initial element in source, increment starting position 
+        // by 1
+        copyVectorToArray(source, destination, mapping.at(i) + 1, 
+          source.size());
       }
     }
 }
 
 // Copies values in source vector to destination array
 // NOTE: destination needs to be allocated space before function call
-// NOTE: begin should be a positive integer (or 0) and end should be a positive integer
+// NOTE: begin should be a positive integer (or 0) and end should be a
+// positive integer
 // NOTE: begin <= end
-void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, int begin, int end) {
+void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, 
+  int begin, int end) {
   for (int i = begin; i < end; i ++) {
     //cout << "i: " << i << endl;
     //cout << "i - begin : " << i - begin << endl;
@@ -137,27 +146,25 @@ void loadMtlFile(string mtlFile, vector<Material> & materials) {
   }
 }
 
-// PRE:
-// POST: vertex_buffer_id has been allocated space,
-// color_buffer_id has been allocated space,
-// number_of_vertices has been allocated space.
 Model::Model() {
-  // do nothing
+
 }
 
 // PRE:
-// POST: vertex_buffer_id has been allocated space,
-// color_buffer_id has been allocated space,
-// number_of_vertices has been allocated space.
+// POST: All glBuffers have been deleted.
 Model::~Model() {
   clear();
 }
 
 // PRE: vertices has been defined, points has been defined,
-// colors has been defined, and face is defined and an integer.
+// normals has been defined, vn has been defined, face is defined and 
+// an integer, normal is defined and an integer.
 // POST: the vertex for the given face has been added to the vertices
 // vector.
-void Model::addFaceVertex(vector<GLfloat> & vertices, vector<GLfloat> points, vector<GLfloat> & normals, vector<GLfloat> & vn, int face, int normal) {
+void Model::addFaceVertex(vector<GLfloat> & vertices, 
+  vector<GLfloat> points, vector<GLfloat> & normals, 
+  vector<GLfloat> & vn, int face, int normal) {
+
   vertices.push_back(points.at((face - 1) * 3));
   vertices.push_back(points.at((face - 1) * 3 + 1));
   vertices.push_back(points.at((face - 1) * 3 + 2));
@@ -167,26 +174,10 @@ void Model::addFaceVertex(vector<GLfloat> & vertices, vector<GLfloat> points, ve
 
 }
 
-// PRE: objFileName is defined and contains the filename of a valid .obj file.
-// This has been defined.
-// POST: The vertices for the obj file have been loaded and binded to 
-// vertex_buffer_id. Also, color (same for all) has also been binded to 
-// color_buffer_id.
-void Model::load(string objFileName, GLuint program_id) {
-  vector<GLfloat> points;
-  vector<GLfloat> vertices;
-  vector<GLfloat> vn;
-  vector<GLfloat> normals;
-
-  clear();
-  
-  /* input file stream for obj file */
-  ifstream inputFile(objFileName.c_str());
-
-  bool success = inputFile.good();
-
-  int count = 0;
-
+void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
+  vector<GLfloat> &vn, vector<GLfloat> &vertices, 
+  vector<GLfloat> &normals, vector<Material> &materials, 
+  vector<int> & materialIDs, vector<int> & material_vertex_map) {
   while (inputFile.good()) {
     string type;
     inputFile >> type;
@@ -225,22 +216,14 @@ void Model::load(string objFileName, GLuint program_id) {
       for (int i = 0; i < materials.size(); i ++) {
         if (materials.at(i).get_name() == mtlName) {
           materialIDs.push_back(i);
-          //cout << "vertices size: " << vertices.size() << endl;
           if (vertices.size() != 0) {
             material_vertex_map.push_back(vertices.size() - 1);
           }
           else {
             material_vertex_map.push_back(0);
           }
-          
-          //cout << "equal " << i << " " << material_vertex_map.at(material_vertex_map.size() - 1) << endl;
         }
       }
-
-      //cout << find(materials.begin(), materials.end(), mtlName)) << endl;
-
-      //materialIDs.push_back((int) (find(materials.begin(), materials.end(), mtlName)));
-      //cout << materialIDs.at(materialIDs.size() - 1) << endl;
     }
     else if (type.compare("f") == 0) {
       string input1, input2, input3;
@@ -252,11 +235,37 @@ void Model::load(string objFileName, GLuint program_id) {
       split(input2, face2, normal2);
       split(input3, face3, normal3);
 
-      addFaceVertex(vertices, points, normals, vn, atoi(face1.c_str()), atof(normal1.c_str()));
-      addFaceVertex(vertices, points, normals, vn, atoi(face2.c_str()), atof(normal2.c_str()));
-      addFaceVertex(vertices, points, normals, vn, atoi(face3.c_str()), atof(normal3.c_str()));
+      addFaceVertex(vertices, points, normals, vn, 
+        atoi(face1.c_str()), atof(normal1.c_str()));
+      addFaceVertex(vertices, points, normals, vn, 
+        atoi(face2.c_str()), atof(normal2.c_str()));
+      addFaceVertex(vertices, points, normals, vn, 
+        atoi(face3.c_str()), atof(normal3.c_str()));
     }
   }
+}
+
+// PRE: objFileName is defined and contains the filename of a valid 
+// .obj file.
+// POST: The vertices for the obj file have been loaded and binded to 
+// vertex_buffer_id.
+void Model::load(string objFileName, GLuint program_id) {
+  vector<GLfloat> points;
+  vector<GLfloat> vertices;
+  vector<GLfloat> vn;
+  vector<GLfloat> normals;
+
+  clear();
+  
+  /* input file stream for obj file */
+  ifstream inputFile(objFileName.c_str());
+
+  bool success = inputFile.good();
+
+  int count = 0;
+
+  readOBJFile(inputFile, points, vn, vertices, normals, materials,
+    materialIDs, material_vertex_map);
 
   if (success) {
     number_of_vertices = vertices.size();
@@ -267,19 +276,12 @@ void Model::load(string objFileName, GLuint program_id) {
       GLfloat * verticeArray = new GLfloat[vertices.size()];
       GLfloat * normalArray = new GLfloat[normals.size()];
 
-      copyVectorToArray(vertices, verticeArray, material_vertex_map, i);
-      copyVectorToArray(normals, normalArray, material_vertex_map, i);
-
-      cout << "material_vertex_map begin:" << endl;
-      for (int i = 0; i < material_vertex_map.size(); i ++) {
-        cout << material_vertex_map.at(i) << endl;
-      }
-      cout << "material_vertex_map end:" << endl;
+      copyVectorToArray(vertices,verticeArray,material_vertex_map,i);
+      copyVectorToArray(normals,normalArray,material_vertex_map,i);
 
       int size = 0;
 
       if (material_vertex_map.size() < 2) {
-        cout << "number_of_vertices: " << number_of_vertices << endl;
         size = number_of_vertices;
       }
       else {
@@ -287,44 +289,46 @@ void Model::load(string objFileName, GLuint program_id) {
           size = material_vertex_map.at(i + 1) + 1;
         }
         else if ((i + 1) < material_vertex_map.size()) {
-          size = material_vertex_map.at(i + 1) - material_vertex_map.at(i);
+          size = material_vertex_map.at(i + 1) - 
+          material_vertex_map.at(i);
         }
         else {
           size = (number_of_vertices) - material_vertex_map.at(i) - 1;
         }
       }
 
-      cout << "size: " << size * BYTES_PER_FLOAT << endl;
+      sizes.push_back(size);
 
       GLuint temp_vertex_buffer_id, temp_normal_buffer_id;
       glGenBuffers(1, &temp_vertex_buffer_id);
       vertex_buffer_id.push_back(temp_vertex_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
       if ((i + 1) < material_vertex_map.size()) {
-        //glBufferData(GL_ARRAY_BUFFER, (material_vertex_map.at(i + 1) - material_vertex_map.at(i)), verticeArray, GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, verticeArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+          verticeArray, GL_STATIC_DRAW);
       }
       else {
-        //glBufferData(GL_ARRAY_BUFFER, ((vertices.size()/3) - material_vertex_map.at(i)) * 12, verticeArray, GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, verticeArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+          verticeArray, GL_STATIC_DRAW);
       }
-      //glBufferData(GL_ARRAY_BUFFER, buffer_size, verticeArray, GL_STATIC_DRAW);
 
       glGenBuffers(1, &temp_normal_buffer_id);
       normal_buffer_id.push_back(temp_normal_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
       if ((i + 1) < material_vertex_map.size()) {
-        //glBufferData(GL_ARRAY_BUFFER, material_vertex_map.at(i + 1) - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, normalArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+          normalArray, GL_STATIC_DRAW);
       }
       else {
-        //glBufferData(GL_ARRAY_BUFFER, buffer_size - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, normalArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+          normalArray, GL_STATIC_DRAW);
       }
 
       // Set shader attribute variables
-      vertex_id.push_back(glGetAttribLocation(program_id, "vertex_3f"));
-      normal_id.push_back(glGetAttribLocation(program_id, "normal_3f"));
+      vertex_id.push_back(glGetAttribLocation(program_id, 
+        "vertex_3f"));
+      normal_id.push_back(glGetAttribLocation(program_id, 
+        "normal_3f"));
 
       delete[] verticeArray;
       delete[] normalArray;
@@ -349,47 +353,28 @@ void Model::draw(GLuint program_id) {
     GLfloat * Ks = material->get_Ks();
     GLfloat Ns = material->get_Ns();
 
-    GLuint attenuation_amount_id = glGetUniformLocation(program_id,
-      "attenuation_amount");
-    //glUniform1f(attenuation_amount_id, 1.0f);
-
-    int size = 0;
-
-    if (vertex_id.size() < 2) {
-      size = number_of_vertices / FLOATS_PER_VERTEX;
-    }
-    else {
-      if (i == 0) {
-        size = material_vertex_map.at(i + 1) + 1;
-      }
-      else if ((i + 1) < vertex_id.size()) {
-        size = material_vertex_map.at(i + 1) - material_vertex_map.at(i);
-      }
-      else {
-        size = (number_of_vertices) - material_vertex_map.at(i) - 1;
-      }
-    }
-
-    //size /= FLOATS_PER_VERTEX;
-
-    //cout << size << endl;
-
-    GLuint ambient_id = glGetUniformLocation(program_id, "ambient_color_4f");
+    GLuint ambient_id = glGetUniformLocation(program_id, 
+      "ambient_color_4f");
     glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
-    GLuint diffuse_id = glGetUniformLocation(program_id, "diffuse_color_4f");
+    GLuint diffuse_id = glGetUniformLocation(program_id, 
+      "diffuse_color_4f");
     glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
-    GLuint specular_id = glGetUniformLocation(program_id, "specular_color_4f");
+    GLuint specular_id = glGetUniformLocation(program_id, 
+      "specular_color_4f");
     glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
-    GLuint specular_coefficient_id = glGetUniformLocation(program_id, "specular_coefficient_1f");
+    GLuint specular_coefficient_id = glGetUniformLocation(program_id, 
+      "specular_coefficient_1f");
     glUniform1f(specular_coefficient_id, Ns);
 
     glEnableVertexAttribArray(vertex_id.at(i));
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
-    glVertexAttribPointer(vertex_id.at(i), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(vertex_id.at(i), 3, GL_FLOAT, GL_FALSE, 
+      0, NULL);
     glEnableVertexAttribArray(normal_id.at(i));
     glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
-    glVertexAttribPointer(normal_id.at(i), 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glDrawArrays(GL_TRIANGLES, 0, size);
+    glVertexAttribPointer(normal_id.at(i), 3, GL_FLOAT, GL_FALSE, 
+      0, NULL);
+    glDrawArrays(GL_TRIANGLES, 0, sizes.at(i));
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
   }

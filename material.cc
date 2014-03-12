@@ -8,14 +8,17 @@
 
 using namespace std;
 
-Material::Material(){
-
+// Constructor
+Material::Material() {
+	// do nothing
 }
 
-Material::~Material(){
-
+// Destructor
+Material::~Material() {
+	clear();
 }
 
+// clears the material properties
 void Material::clear() {
 	name = "";
 	Ka_r = 0.0f;
@@ -30,36 +33,47 @@ void Material::clear() {
 	Ns = 0.0f;
 }
 
+// updates the name of the material
 void Material::set_name(string mtlName){
 	name = mtlName;
 }
 
+// updates the Ka property of the material
+// NOTE: 0.0 <= r,g,b <= 1.0
 void Material::set_Ka(GLfloat r, GLfloat g, GLfloat b){
 	Ka_r = r;
 	Ka_g = g;
 	Ka_b = b;
 }
 
+// updates the Kd property of the material
+// NOTE: 0.0 <= r,g,b <= 1.0
 void Material::set_Kd(GLfloat r, GLfloat g, GLfloat b){
 	Kd_r = r;
 	Kd_g = g;
 	Kd_b = b;
 }
 
+// updates the Ks property of the material
+// NOTE: 0.0 <= r,g,b <= 1.0
 void Material::set_Ks(GLfloat r, GLfloat g, GLfloat b){
 	Ks_r = r;
 	Ks_g = g;
 	Ks_b = b;
 }
 
+// updates the Ns coefficient of the material
+// NOTE: 0.0 <= coefficient <= 1.0
 void Material::set_Ns(GLfloat coefficient){
 	Ns = coefficient;
 }
 
+// returns the name of the material
 string Material::get_name(){
 	return name;
 }
 
+// returns a pointer to the Ka array of the material
 GLfloat * Material::get_Ka(){
 	GLfloat * Ka = new GLfloat[3];
 	Ka[0] = Ka_r;
@@ -69,6 +83,7 @@ GLfloat * Material::get_Ka(){
 	return Ka;
 }
 
+// returns a pointer to the Kd array of the material
 GLfloat * Material::get_Kd(){
 	GLfloat * Kd = new GLfloat[3];
 	Kd[0] = Kd_r;
@@ -78,6 +93,7 @@ GLfloat * Material::get_Kd(){
 	return Kd;
 }
 
+// returns a pointer to the Ks array of the material
 GLfloat * Material::get_Ks(){
 	GLfloat * Ks = new GLfloat[3];
 	Ks[0] = Ks_r;
@@ -87,6 +103,7 @@ GLfloat * Material::get_Ks(){
 	return Ks;
 }
 
+// returns the Ns property of the material
 GLfloat Material::get_Ns(){
 	return Ns;
 }

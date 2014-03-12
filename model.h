@@ -9,47 +9,67 @@
 #include <vector>
 #include "material.h"
 
+// Copies values in source vector to destination array
+// NOTE: destination needs to be allocated space before function call
+// NOTE: i should be a positive integer (or 0) and i < mapping.size()
 void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, std::vector<int> mapping, int i);
+
+// Copies values in source vector to destination array
+// NOTE: destination needs to be allocated space before function call
+// NOTE: begin should be a positive integer (or 0) and end should be a
+// positive integer
+// NOTE: begin <= end
 void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, int begin, int end);
+
+// Splits string into two parts. First part is face value.
+// Second value is normal value.
+void split(string input, string & face, string & normal);
+
+// loads Material file
+// PRE: mtlFile is defined, materials has been allocated space
+// POST: materials contains all the materials from the mtlFile
+void loadMtlFile(string mtlFile, vector<Material> & materials);
 
 class Model {
 
 private:
 
 	/* Will hold binding to vertices and color arrays */
-	//GLuint vertex_buffer_id, normal_buffer_id;
 	std::vector<GLuint> vertex_buffer_id, normal_buffer_id;
 	/* Holds number of vertices in the model */
 	int number_of_vertices;
-	//GLuint vertex_id, normal_id;
 	std::vector<GLuint> vertex_id, normal_id;
 	std::vector<int> materialIDs;
 	std::vector<int> material_vertex_map;
 	std::vector<Material> materials;
+	std::vector<int> sizes;
 
 public:
 	
 	// PRE:
-	// POST: vertex_buffer_id has been allocated space,
-	// color_buffer_id has been allocated space,
-	// number_of_vertices has been allocated space.
+	// POST:
 	Model();
 
-	// PRE: This is defined.
-	// POST: Any existing buffers created by the model have been deleted.
+	// PRE:
+	// POST: All glBuffers have been deleted.
 	~Model();
 
+	void readOBJFile(ifstream & inputFile, vector<GLfloat> & points, 
+	  vector<GLfloat> & vn, vector<GLfloat> & vertices, 
+	  vector<GLfloat> & normals, vector<Material> & materials,
+	  vector<int> & materialIDs, vector<int> & material_vertex_map);
+
 	// PRE: vertices has been defined, points has been defined,
-	// colors has been defined, and face is defined and an integer.
+	// normals has been defined, vn has been defined, face is defined and 
+	// an integer, normal is defined and an integer.
 	// POST: the vertex for the given face has been added to the vertices
 	// vector.
 	void addFaceVertex(std::vector<GLfloat> & vertices, std::vector<GLfloat> points, std::vector<GLfloat> & normals, std::vector<GLfloat> & vn, int face, int normal);
 
-	// PRE: objFileName is defined and contains the filename of a valid .obj file.
-	// This has been defined.
+	// PRE: objFileName is defined and contains the filename of a valid 
+	// .obj file.
 	// POST: The vertices for the obj file have been loaded and binded to 
-	// vertex_buffer_id. Also, color (same for all) has also been binded to 
-	// color_buffer_id.
+	// vertex_buffer_id.
 	void load(std::string objFileName, GLuint program_id);
 
 	// PRE: This is defined. vertex_buffer_id is a valid buffer binded to an
@@ -58,6 +78,7 @@ public:
 	// POST: The model has been drawn to the screen. 
 	void draw(GLuint program_id);
 
+	// Deletes the buffers from memory
 	void clear();
 };
 #endif

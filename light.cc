@@ -16,6 +16,7 @@ GLuint Light::attenuation_amount_id = 0;
 GLuint Light::program_id = 0;
 
 // constructor
+// NOTE: program_id should be defined
 Light::Light(GLuint program_id) {
 
 	if (! Light::instantiated) {
@@ -38,6 +39,7 @@ Light::Light(GLuint program_id) {
 }
 
 // updates position of light
+// NOTE: 0.0 <= x,y,z <= 1.0
 void Light::set_position(GLfloat x, GLfloat y, GLfloat z){
 	light_x = x;
 	light_y = y;
@@ -45,6 +47,7 @@ void Light::set_position(GLfloat x, GLfloat y, GLfloat z){
 }
 
 // updates color of light
+// NOTE: 0.0 <= r,g,b <= 1.0
 void Light::set_color(GLfloat r, GLfloat g, GLfloat b){
 	light_r = r;
 	light_g = g;
@@ -52,6 +55,7 @@ void Light::set_color(GLfloat r, GLfloat g, GLfloat b){
 }
 
 // updates attenuation amount of light
+// NOTE factor >= 0.0
 void Light::set_attenuation(GLfloat factor){
 	attenuation = factor;
 }
@@ -59,9 +63,7 @@ void Light::set_attenuation(GLfloat factor){
 // activates the light. Only one light can be activated at a time.
 // If a light is already activated, this call replaces the current
 // active light.
-// program_id should be an unsigned int containing the id of the program
-// where the light is being used.
-void Light::activate(GLuint program_id) {
+void Light::activate() {
 	light_id = glGetUniformLocation(Light::program_id, "light_position");
 	light_color_id = glGetUniformLocation(Light::program_id, "light_color");
 	attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_amount");

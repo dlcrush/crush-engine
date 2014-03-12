@@ -22,7 +22,7 @@
 using namespace std;
 
 // handles processing for user input
-void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2, float & y_rot2, float delta_rot2, Light light, GLuint program_id) {
+void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2, float & y_rot2, float delta_rot2, Light light) {
   // Handle user input
   if (glfwGetKey(GLFW_KEY_UP) == GLFW_PRESS) {
     x_rot += delta_rot;
@@ -51,7 +51,7 @@ void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2
   }
 
   light.set_position(-y_rot2, x_rot2, 1.0f);
-  light.activate(program_id);
+  light.activate();
 }
 
 // Handles the processing for the current view
@@ -73,7 +73,7 @@ void process_view(float x_rot, float y_rot) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   ratio = width / (float) height;
-  glOrtho(-3 * ratio, 3 * ratio, -3.0f, 3.0f, -3.0f, 3.0f);
+  glOrtho(-2 * ratio, 2 * ratio, -2.0f, 2.0f, -2.0f, 2.0f);
 
   // Select and setup the modelview matrix
   glMatrixMode(GL_MODELVIEW);
@@ -111,10 +111,10 @@ int main(int argc, char * argv[]) {
   light.set_position(1.0f, 1.0f, 1.0f);
   light.set_color(1.0f, 1.0f, 1.0f);
   light.set_attenuation(1.0f);
-  light.activate(program_id);
+  light.activate();
 
   do {
-      process_input(x_rot, y_rot, delta_rot, x_rot2, y_rot2, delta_rot2, light, program_id);
+      process_input(x_rot, y_rot, delta_rot, x_rot2, y_rot2, delta_rot2, light);
       process_view(x_rot, y_rot);
 
       model.draw(program_id);
