@@ -15,8 +15,11 @@ using namespace std;
 
 void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, int begin, int end) {
   for (int i = begin; i < end; i ++) {
+    cout << "i: " << i << endl;
+    cout << "i - begin : " << i - begin << endl;
     destination[i - begin] = source.at(i);
   }
+  cout << endl;
 }
 
 // Splits string into two parts. First part is face value.
@@ -29,19 +32,8 @@ void split(string input, string & face, string & normal) {
   else {
     string subString = input.substr(index + 1, string::npos);
     int index2 = subString.find("/");
-    // if (index2 == string::npos) {
-    //   face = input.substr(0, index);
-    //   normal = input.substr(index + 2, string::npos);
-    // }
-    // else {
     face = input.substr(0, index);
     normal = subString.substr(index2 + 1, string::npos);
-
-    //cout << face << endl;
-    //cout << normal << endl;
-    // }
-    //face = input.substr(0, index);
-    //normal = input.substr(index + 2, string::npos);
   }
 }
 
@@ -161,17 +153,15 @@ void Model::load(string objFileName, GLuint program_id) {
   vector<GLfloat> vertices;
   vector<GLfloat> vn;
   vector<GLfloat> normals;
-  // vector<Material> materials;
 
   /* Delete existing buffers, if any. */
   for (int i = 0; i < vertex_buffer_id.size(); i ++) {
     glDeleteBuffers(1, &vertex_buffer_id.at(i));
     glDeleteBuffers(1, &normal_buffer_id.at(i));
   }
-  //glDeleteBuffers(1, &vertex_buffer_id);
-  //glDeleteBuffers(1, &normal_buffer_id);
-  //vertex_buffer_id = 0;
-  //normal_buffer_id = 0;
+
+  //vertex_buffer_id.erase(vertex_buffer_id.begin());
+  //normal_buffer_id.erase(normal_buffer_id.begin());
 
   /* input file stream for obj file */
   ifstream inputFile(objFileName.c_str());
@@ -254,51 +244,62 @@ void Model::load(string objFileName, GLuint program_id) {
   if (success) {
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;
-	  
-    // GLfloat * verticeArray = new GLfloat[vertices.size()]; 
-    // copy(vertices.begin(), vertices.end(), verticeArray);
-    // GLfloat * normalArray = new GLfloat[normals.size()];
-    // copy(normals.begin(), normals.end(), normalArray);
-
-    //cout << "material_vertex_map size: " << material_vertex_map.size() << endl;
 
     for (int i = 0; i < material_vertex_map.size(); i ++) {
 
-      //cout << "vertices.begin(): " << vertices.begin() << endl;
-
       GLfloat * verticeArray = new GLfloat[vertices.size()];
       if ((i + 1) < material_vertex_map.size()) {
-        cout << "begin: " << material_vertex_map.at(i) << endl;
-        cout << "end: " << material_vertex_map.at(i + 1) << endl;
-        cout << "size: " << vertices.size() << endl;
-        copyVectorToArray(vertices, verticeArray, material_vertex_map.at(i), material_vertex_map.at(i + 1) + 1);
+        // cout << "begin: " << material_vertex_map.at(i) + 1 << endl;
+        // cout << "end: " << material_vertex_map.at(i + 1) + 1 << endl;
+
+        if (i == 0) {
+          cout << "begin: " << material_vertex_map.at(i) << endl;
+          cout << "end: " << material_vertex_map.at(i + 1) + 1 << endl;
+          copyVectorToArray(vertices, verticeArray, material_vertex_map.at(i), material_vertex_map.at(i + 1) + 1);
+        }
+        else {
+          cout << "begin: " << material_vertex_map.at(i) + 1 << endl;
+          cout << "end: " << material_vertex_map.at(i + 1) + 1 << endl;
+          copyVectorToArray(vertices, verticeArray, material_vertex_map.at(i) + 1, material_vertex_map.at(i + 1) + 1);
+        }
+        
+        //cout << "size: " << vertices.size() << endl;
+        
+        // cout << "^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+        // for (int i = 0; i < 18; i ++) {
+        //   cout << verticeArray[i] << endl;
+        // }
+        // cout << "^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
       }
       else {
         cout << "begin: " << material_vertex_map.at(i) << endl;
-        cout << "end: " << buffer_size << endl;
-        cout << "size: " << vertices.size() << endl;
+        cout << "end: " << vertices.size() << endl;
+        //cout << "size: " << vertices.size() << endl;
         copyVectorToArray(vertices, verticeArray, material_vertex_map.at(i), vertices.size());
       }
-      //copyVectorToArray(vertices, verticeArray, )
-      //copy(vertices.begin(), vertices.end(), verticeArray);
       GLfloat * normalArray = new GLfloat[normals.size()];
       if ((i + 1) < material_vertex_map.size()) {
         //copyVectorToArray(normals, normalArray, material_vertex_map.at(i), material_vertex_map.at(i + 1) + 1);
       }
       else {
-        //copyVectorToArray(normals, normalArray, material_vertex_map.at(i), buffer_size);
+        //copyVectorToArray(normals, normalArray, material_vertex_map.at(i), normals.size());
       }
       //copy(normals.begin(), normals.end(), normalArray);
 
       GLuint temp_vertex_buffer_id, temp_normal_buffer_id;
       glGenBuffers(1, &temp_vertex_buffer_id);
+      cout << "temp " << temp_vertex_buffer_id << endl;
       vertex_buffer_id.push_back(temp_vertex_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
       if ((i + 1) < material_vertex_map.size()) {
-        glBufferData(GL_ARRAY_BUFFER, material_vertex_map.at(i + 1) - material_vertex_map.at(i), verticeArray, GL_STATIC_DRAW);
+        cout << "fuck " << (material_vertex_map.at(i + 1) - material_vertex_map.at(i)) << endl;
+        //glBufferData(GL_ARRAY_BUFFER, (material_vertex_map.at(i + 1) - material_vertex_map.at(i)), verticeArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 18 * 4, verticeArray, GL_STATIC_DRAW);
       }
       else {
-        glBufferData(GL_ARRAY_BUFFER, buffer_size - material_vertex_map.at(i), verticeArray, GL_STATIC_DRAW);
+        cout << "shit " << ((vertices.size()) - material_vertex_map.at(i)) * 12  << endl;
+        //glBufferData(GL_ARRAY_BUFFER, ((vertices.size()/3) - material_vertex_map.at(i)) * 12, verticeArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 18 * 4, verticeArray, GL_STATIC_DRAW);
       }
       //glBufferData(GL_ARRAY_BUFFER, buffer_size, verticeArray, GL_STATIC_DRAW);
 
@@ -306,31 +307,13 @@ void Model::load(string objFileName, GLuint program_id) {
       normal_buffer_id.push_back(temp_normal_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
       if ((i + 1) < material_vertex_map.size()) {
-        glBufferData(GL_ARRAY_BUFFER, material_vertex_map.at(i + 1) - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
+        //glBufferData(GL_ARRAY_BUFFER, material_vertex_map.at(i + 1) - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 18 * 4, normalArray, GL_STATIC_DRAW);
       }
       else {
-        glBufferData(GL_ARRAY_BUFFER, buffer_size - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
+        //glBufferData(GL_ARRAY_BUFFER, buffer_size - material_vertex_map.at(i), normalArray, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 18 * 4, normalArray, GL_STATIC_DRAW);
       }
-      //glBufferData(GL_ARRAY_BUFFER, buffer_size, normalArray, GL_STATIC_DRAW);
-
-      // Material * material = &(materials.at(i));
-
-      // GLfloat * Ka = material->get_Ka();
-      // GLfloat * Kd = material->get_Kd();
-      // GLfloat * Ks = material->get_Ks();
-      // GLfloat Ns = material->get_Ns();
-
-      // GLuint attenuation_amount_id = glGetUniformLocation(program_id,
-      //   "attenuation_amount");
-      // glUniform1f(attenuation_amount_id, 1.0f); 
-      // GLuint ambient_id = glGetUniformLocation(program_id, "ambient_color_4f");
-      // glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
-      // GLuint diffuse_id = glGetUniformLocation(program_id, "diffuse_color_4f");
-      // glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
-      // GLuint specular_id = glGetUniformLocation(program_id, "specular_color_4f");
-      // glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
-      // GLuint specular_coefficient_id = glGetUniformLocation(program_id, "specular_coefficient_1f");
-      // glUniform1f(specular_coefficient_id, Ns);
 
       // Set shader attribute variables
       vertex_id.push_back(glGetAttribLocation(program_id, "vertex_3f"));
@@ -339,16 +322,29 @@ void Model::load(string objFileName, GLuint program_id) {
       delete[] verticeArray;
       delete[] normalArray;
 
-      for (int i = 0; i < vertex_id.size(); i ++) {
-        cout << material_vertex_map.at(i) << endl;
-      }
+      // cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << endl;
+      // for (int i = 0; i < vertex_id.size(); i ++) {
+      //   cout << material_vertex_map.at(i) << endl;
+      // }
+      // cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << endl;
 
-      cout << number_of_vertices << endl;
+      //cout << number_of_vertices << endl;
 
-      cout << vertex_id.size() << endl;
-      cout << normal_id.size() << endl;
-      cout << vertex_buffer_id.size() << endl;
-      cout << normal_buffer_id.size() << endl;
+      // cout << vertex_id.size() << endl;
+      // cout << normal_id.size() << endl;
+      // cout << vertex_buffer_id.size() << endl;
+      // cout << normal_buffer_id.size() << endl;
+
+      // cout << "***************************" << endl;
+      // for (int i = 0; i < vertex_buffer_id.size(); i ++) {
+      //   cout << vertex_buffer_id.at(i) << endl;
+      // }
+      // cout << "****************************" << endl;
+      // cout << "############################" << endl;
+      // for (int i = 0; i < normal_buffer_id.size(); i ++) {
+      //   cout << normal_buffer_id.at(i) << endl;
+      // }
+      // cout << "############################" << endl;
     }
   }
 }
@@ -391,7 +387,7 @@ void Model::draw(GLuint program_id) {
       }
     }
 
-    size /= FLOATS_PER_VERTEX;
+    //size /= FLOATS_PER_VERTEX;
 
     //cout << size << endl;
 
@@ -415,27 +411,15 @@ void Model::draw(GLuint program_id) {
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
   }
-  
-
-  // if (vertex_id.size() > 0 && normal_id.size() > 0) {
-  //   glEnableVertexAttribArray(vertex_id);
-  //   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
-  //   glVertexAttribPointer(vertex_id, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-  //   glEnableVertexAttribArray(normal_id);
-  //   glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id);
-  //   glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-  //   glDrawArrays(GL_TRIANGLES, 0, number_of_vertices / FLOATS_PER_VERTEX);
-  //   glDisableVertexAttribArray(vertex_id);
-  //   glDisableVertexAttribArray(normal_id);
-  // }
 }
 
 // Deletes the buffers from memory
 void Model::clear() {
-  /*
-  glDeleteBuffers(1, &vertex_buffer_id);
-  glDeleteBuffers(1, &normal_buffer_id);
-  vertex_buffer_id = 0;
-  normal_buffer_id = 0;
-  */
+  for (int i = 0; i < vertex_buffer_id.size(); i ++) {
+    glDeleteBuffers(1, &vertex_buffer_id.at(i));
+    glDeleteBuffers(1, &normal_buffer_id.at(i));
+  }
+
+  vertex_buffer_id.erase(vertex_buffer_id.begin());
+  normal_buffer_id.erase(normal_buffer_id.begin());
 }

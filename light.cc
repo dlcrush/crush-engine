@@ -19,15 +19,10 @@ GLuint Light::program_id = 0;
 Light::Light(GLuint program_id) {
 
 	if (! Light::instantiated) {
-		cout << "contrstructor" << endl;
 		Light::instantiated = false;
-		cout << Light::light_id << endl;
 		Light::program_id = program_id;
 		Light::light_id = glGetUniformLocation(Light::program_id, "light_position");
-		cout << Light::light_id << endl;
-		cout << Light::light_color_id << endl;
 		Light::light_color_id = glGetUniformLocation(Light::program_id, "light_color");
-		cout << Light::light_color_id << endl;
 		Light::attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_amount");
 	}
 

@@ -57,7 +57,7 @@ void process_view(float x_rot, float y_rot) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   ratio = width / (float) height;
-  glOrtho(-1 * ratio, 1 * ratio, -1.0f, 1.0f, -1.0f, 1.0f);
+  glOrtho(-3 * ratio, 3 * ratio, -3.0f, 3.0f, -3.0f, 3.0f);
 
   // Select and setup the modelview matrix
   glMatrixMode(GL_MODELVIEW);
@@ -118,7 +118,7 @@ int main(int argc, char * argv[]) {
         y_rot2 -= delta_rot2;
       }
 
-      light.set_position(-y_rot2, x_rot2, 2.0f);
+      light.set_position(-y_rot2, x_rot2, 1.0f);
       light.activate(program_id);
 
       model.draw(program_id);

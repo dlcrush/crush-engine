@@ -1,0 +1,475 @@
+# Blender MTL File: 'None'
+# Material Count: 43
+newmtl Color_005_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.357647 0.357647 0.357647
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_006_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.269804 0.269804 0.269804
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_006____Fencing_Wood_Old_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.269804 0.269804 0.269804
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl Color_007_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.181961 0.181961 0.181961
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_007__Vegetation_Grass_Artificial_Yellow.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.181961 0.181961 0.181961
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Vegetation_Grass_Artificial_Yellow.jpg
+
+
+newmtl Color_B16_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.320000 0.078431 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_B18_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.320000 0.175686 0.125490
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_B18__Fencing_Wood_Old_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.320000 0.175686 0.125490
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Fencing_Wood_Old_.jpg
+
+
+newmtl Color_C08_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.445490 0.254118
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_C08__Fencing_Wood_Old_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.445490 0.254118
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Fencing_Wood_Old_.jpg
+
+
+newmtl Color_D22_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.160000 0.125490 0.031373
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_E04_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.480000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_E08_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.254118
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl Color_E08____Fencing_Wood_Old_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.254118
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl Color_E11____Fencing_Wood_Old_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.480000 0.480000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl Color_E12____Fencing_Wood_Old_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.480000 0.480000 0.094118
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl Fencing_Wood_Old__Fencing_Wood_Old_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Fencing_Wood_Old_.jpg
+
+
+newmtl Groundcover_Rock_Crushed_2inch__Groundcover_Rock_Crushed_2inch_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Groundcover_Rock_Crushed_2inch_.jpg
+
+
+newmtl Groundcover_Sand_Raked__Groundcover_Sand_Raked_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Groundcover_Sand_Raked_.jpg
+
+
+newmtl Rolling_hills_of_the_Southern_Uplands_-_geograph_org_uk_-_22179_Rolling_hills_of_the_Southern_Uplands_-_geograph_org_uk_-_22179
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Rolling_hills_of_the_Southern_Uplands_-_geograph_org_uk_-_221791.jpg
+
+
+newmtl Roofing_Shingles_GAF_Estates_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Roofing_Shingles_GAF_Estates_.jpg
+
+
+newmtl Roofing_Shingles_GAF_Estates__Roofing_Shingles_GAF_Estates_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Roofing_Shingles_GAF_Estates_.jpg
+
+
+newmtl Roofing_Slate_Rounded__Roofing_Slate_Rounded_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Roofing_Slate_Rounded_.jpg
+
+
+newmtl Stone_Brushed_Khaki__Stone_Brushed_Khaki_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Stone_Brushed_Khaki_.jpg
+
+
+newmtl Stone_Sandstone_Ashlar_Light__Stone_Sandstone_Ashlar_Light_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Stone_Sandstone_Ashlar_Light_.jpg
+
+
+newmtl Stone_Vein_Gray__Stone_Vein_Gray_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Stone_Vein_Gray_.jpg
+
+
+newmtl Vegetation_Grass_Artificial_Yellow_Vegetation_Grass_Artificial_Yellow.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Vegetation_Grass_Artificial_Yellow.jpg
+
+
+newmtl Wood_Bamboo_Medium__Wood_Bamboo_Medium_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Wood_Bamboo_Medium_.jpg
+
+
+newmtl Wood__Floor__Wood__Floor_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Wood__Floor_.jpg
+
+
+newmtl _0020_Red_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl _0024_OrangeRed_
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.216471 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl __Fencing_Wood_Old_1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl __Fencing_Wood_Old_1___Fencing_Wood_Old_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Fencing_Wood_Old_1.jpg
+
+
+newmtl __Groundcover_Rock_Crushed_2inch_1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Groundcover_Rock_Crushed_2inch_1.jpg
+
+
+newmtl __Groundcover_Rock_Crushed_2inch_2___Groundcover_Rock_Crushed_2inch_2.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Groundcover_Rock_Crushed_2inch_2.jpg
+
+
+newmtl __Vegetation_Grass1_1___Vegetation_Grass1_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Vegetation_Grass1_1.jpg
+
+
+newmtl __Wood_Lumber_ButtJoined_-2___Wood_Lumber_ButtJoined_-2.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Wood_Lumber_ButtJoined_-2.jpg
+
+
+newmtl dsc_9802_3_4_dsc_9802_3_4.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\dsc_9802_3_4.jpg
+
+
+newmtl material
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd none
+
+
+newmtl material_1_material_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\material_1.jpg
+
+
+newmtl material_Fencing_Wood_Old_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Fencing_Wood_Old_.jpg
+
+
+newmtl material_Roofing_Shingles_GAF_Estates_.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\Roofing_Shingles_GAF_Estates_.jpg
+
+
+newmtl material___Groundcover_Rock_Crushed_2inch_1.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd village\__Groundcover_Rock_Crushed_2inch_1.jpg
+
+
