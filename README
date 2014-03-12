@@ -1,0 +1,7 @@
+To compile, run the following command:
+
+$: make
+
+To run the compiled program, use the following command:
+
+$: ./shader <name of obj file>

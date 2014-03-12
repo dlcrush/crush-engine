@@ -10,3 +10,7 @@ material.o: material.cc material.h
 	g++ -c material.cc -framework OpenGL -lglfw -lGLEW
 light.o: light.cc light.h
 	g++ -c light.cc -framework OpenGL -lglfw -lGLEW
+clean:
+	rm *.o
+	rm shader
+	rm *~

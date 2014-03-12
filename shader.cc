@@ -73,7 +73,7 @@ void process_view(float x_rot, float y_rot) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   ratio = width / (float) height;
-  glOrtho(-2 * ratio, 2 * ratio, -2.0f, 2.0f, -2.0f, 2.0f);
+  glOrtho(-2.0 * ratio, 2.0 * ratio, -2.0f, 2.0f, -2.0f, 2.0f);
 
   // Select and setup the modelview matrix
   glMatrixMode(GL_MODELVIEW);
