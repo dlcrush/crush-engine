@@ -23,7 +23,7 @@ void copyVectorToArray(std::vector<GLfloat> source, GLfloat * destination, int b
 
 // Splits string into two parts. First part is face value.
 // Second value is normal value.
-void split(string input, string & face, string & normal);
+void split(string input, string & face, string & normal, string & texture);
 
 // loads Material file
 // PRE: mtlFile is defined, materials has been allocated space
@@ -54,17 +54,22 @@ public:
 	// POST: All glBuffers have been deleted.
 	~Model();
 
-	void readOBJFile(ifstream & inputFile, vector<GLfloat> & points, 
-	  vector<GLfloat> & vn, vector<GLfloat> & vertices, 
-	  vector<GLfloat> & normals, vector<Material> & materials,
-	  vector<int> & materialIDs, vector<int> & material_vertex_map);
+	void readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
+  vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
+  vector<GLfloat> &normals, vector<Material> &materials, 
+  vector<GLfloat> &textures,
+  vector<int> & materialIDs, vector<int> & material_vertex_map);
 
 	// PRE: vertices has been defined, points has been defined,
 	// normals has been defined, vn has been defined, face is defined and 
 	// an integer, normal is defined and an integer.
 	// POST: the vertex for the given face has been added to the vertices
 	// vector.
-	void addFaceVertex(std::vector<GLfloat> & vertices, std::vector<GLfloat> points, std::vector<GLfloat> & normals, std::vector<GLfloat> & vn, int face, int normal);
+	void addFaceVertex(vector<GLfloat> & vertices, 
+  vector<GLfloat> points, vector<GLfloat> & normals, 
+  vector<GLfloat> & vn, vector<GLfloat> & textures,
+  vector<GLfloat> & vt, int face, int normal, 
+  int texture);
 
 	// PRE: objFileName is defined and contains the filename of a valid 
 	// .obj file.

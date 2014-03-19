@@ -65,15 +65,20 @@ void copyVectorToArray(vector<GLfloat> source, GLfloat * destination,
 
 // Splits string into two parts. First part is face value.
 // Second value is normal value.
-void split(string input, string & face, string & normal) {
+void split(string input, string & face, string & normal, string & texture) {
   int index = input.find("/");
   if (index == string::npos) {
     face = input;
   }
   else {
+    //string texture = "";
     string subString = input.substr(index + 1, string::npos);
     int index2 = subString.find("/");
     face = input.substr(0, index);
+    string test = input.substr(index + 1, string::npos);
+    int index3 = subString.find("/");
+    texture = test.substr(0, index3);
+    //cout << "texture: " << texture << endl;
     normal = subString.substr(index2 + 1, string::npos);
   }
 }
@@ -163,7 +168,9 @@ Model::~Model() {
 // vector.
 void Model::addFaceVertex(vector<GLfloat> & vertices, 
   vector<GLfloat> points, vector<GLfloat> & normals, 
-  vector<GLfloat> & vn, int face, int normal) {
+  vector<GLfloat> & vn, vector<GLfloat> & textures,
+  vector<GLfloat> & vt, int face, int normal, 
+  int texture) {
 
   vertices.push_back(points.at((face - 1) * 3));
   vertices.push_back(points.at((face - 1) * 3 + 1));
@@ -171,12 +178,14 @@ void Model::addFaceVertex(vector<GLfloat> & vertices,
   normals.push_back(vn.at((normal - 1) * 3));
   normals.push_back(vn.at((normal - 1) * 3 + 1));
   normals.push_back(vn.at((normal - 1) * 3 + 2));
-
+  textures.push_back(vt.at((texture - 1) * 2));
+  textures.push_back(vt.at((texture - 1) * 2 + 1));
 }
 
 void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
-  vector<GLfloat> &vn, vector<GLfloat> &vertices, 
+  vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
   vector<GLfloat> &normals, vector<Material> &materials, 
+  vector<GLfloat> &textures,
   vector<int> & materialIDs, vector<int> & material_vertex_map) {
   while (inputFile.good()) {
     string type;
@@ -200,6 +209,14 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       vn.push_back(vn1);
       vn.push_back(vn2);
       vn.push_back(vn3);
+    }
+    else if (type.compare("vt") == 0) {
+      GLfloat vt1, vt2;
+
+      inputFile >> vt1 >> vt2;
+
+      vt.push_back(vt1);
+      vt.push_back(vt2);
     }
     else if (type.compare("mtllib") == 0) {
       string mtlFile;
@@ -229,18 +246,29 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       string input1, input2, input3;
       string face1, face2, face3;
       string normal1, normal2, normal3;
+      string texture1, texture2, texture3;
       inputFile >> input1 >> input2 >> input3;
 
-      split(input1, face1, normal1);
-      split(input2, face2, normal2);
-      split(input3, face3, normal3);
+      split(input1, face1, normal1, texture1);
+      split(input2, face2, normal2, texture2);
+      split(input3, face3, normal3, texture3);
 
-      addFaceVertex(vertices, points, normals, vn, 
-        atoi(face1.c_str()), atof(normal1.c_str()));
-      addFaceVertex(vertices, points, normals, vn, 
-        atoi(face2.c_str()), atof(normal2.c_str()));
-      addFaceVertex(vertices, points, normals, vn, 
-        atoi(face3.c_str()), atof(normal3.c_str()));
+      cout << "texture1 = " << texture1 << endl;
+      cout << "texture2 = " << texture2 << endl;
+      cout << "texture3 = " << texture3 << endl;
+
+      addFaceVertex(vertices, points, normals, vn,
+        textures, vt,
+        atoi(face1.c_str()), atof(normal1.c_str()),
+        atof(texture2.c_str()));
+      addFaceVertex(vertices, points, normals, vn,
+        textures, vt,
+        atoi(face2.c_str()), atof(normal2.c_str()),
+        atof(texture2.c_str()));
+      addFaceVertex(vertices, points, normals, vn,
+        textures, vt,
+        atoi(face3.c_str()), atof(normal3.c_str()),
+        atof(texture3.c_str()));
     }
   }
 }
@@ -254,6 +282,8 @@ void Model::load(string objFileName, GLuint program_id) {
   vector<GLfloat> vertices;
   vector<GLfloat> vn;
   vector<GLfloat> normals;
+  vector<GLfloat> vt;
+  vector<GLfloat> textures;
 
   clear();
   
@@ -264,8 +294,8 @@ void Model::load(string objFileName, GLuint program_id) {
 
   int count = 0;
 
-  readOBJFile(inputFile, points, vn, vertices, normals, materials,
-    materialIDs, material_vertex_map);
+  readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
+    textures, materialIDs, material_vertex_map);
 
   if (success) {
     number_of_vertices = vertices.size();

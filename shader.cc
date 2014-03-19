@@ -73,7 +73,7 @@ void process_view(float x_rot, float y_rot) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   ratio = width / (float) height;
-  glOrtho(-2.0 * ratio, 2.0 * ratio, -2.0f, 2.0f, -2.0f, 2.0f);
+  glOrtho(-3.0 * ratio, 3.0 * ratio, -3.0f, 3.0f, -3.0f, 3.0f);
 
   // Select and setup the modelview matrix
   glMatrixMode(GL_MODELVIEW);
@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
   Light light(program_id);
   light.set_position(1.0f, 1.0f, 1.0f);
   light.set_color(1.0f, 1.0f, 1.0f);
-  light.set_attenuation(1.0f);
+  light.set_attenuation(0.5f);
   light.activate();
 
   do {

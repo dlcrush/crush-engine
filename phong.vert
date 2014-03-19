@@ -55,22 +55,14 @@ void main() {
   // specular
   specular = specular_coefficient_1f * specular_color_4f * light_color2 * pow(NdotR, 100);
 
-  //specular = specular_coefficient_1f * specular_color_4f * light_color * pow(NdotR, 100);
-
-  //specular = specular;
-
   // diffuse
   diffuse = diffuse_color_4f * light_color2 * NdotL;
-
-  //diffuse = diffuse_color_4f * light_color * NdotL;
 
   // ambient
   ambient = ambient_color_4f * light_color2;
 
-  //ambient = ambient_color_4f * light_color;
   // simplified phong reflectance
   gl_FrontColor = specular + diffuse + ambient;
-  //gl_FrontColor = vec4(1,1,1,1);
 
   // position, world space
   gl_Position = gl_ModelViewProjectionMatrix * vec4(vertex_3f, 1); 
