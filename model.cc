@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "PPMReader.h"
 using namespace std;
 
 #define BYTES_PER_FLOAT 4
@@ -144,6 +145,17 @@ void loadMtlFile(string mtlFile, vector<Material> & materials) {
       material.set_Ns(coefficient);
       //materials.push_back(material);
     }
+    else if(type.compare("map_Kd") == 0) {
+      cout << "map_Kd" << endl;
+
+      string fileName;
+
+      inputFile >> fileName;
+
+      //PPMReader reader(fileName);
+      PPMReader test(fileName);
+      test.read();
+    }
   }
 
   if (existingMtl) {
@@ -253,14 +265,14 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       split(input2, face2, normal2, texture2);
       split(input3, face3, normal3, texture3);
 
-      cout << "texture1 = " << texture1 << endl;
-      cout << "texture2 = " << texture2 << endl;
-      cout << "texture3 = " << texture3 << endl;
+      //cout << "texture1 = " << texture1 << endl;
+      //cout << "texture2 = " << texture2 << endl;
+      //cout << "texture3 = " << texture3 << endl;
 
       addFaceVertex(vertices, points, normals, vn,
         textures, vt,
         atoi(face1.c_str()), atof(normal1.c_str()),
-        atof(texture2.c_str()));
+        atof(texture1.c_str()));
       addFaceVertex(vertices, points, normals, vn,
         textures, vt,
         atoi(face2.c_str()), atof(normal2.c_str()),
@@ -296,6 +308,19 @@ void Model::load(string objFileName, GLuint program_id) {
 
   readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
     textures, materialIDs, material_vertex_map);
+
+  for (int i = 0; i < vt.size(); i ++) {
+    //cout << vt.at(i) << endl;
+  }
+
+  //cout << endl;
+
+  for (int i = 0; i < textures.size(); i ++) {
+    //cout << textures.at(i) << endl;
+    if ((i + 1) % 2 == 0) {
+      //cout << endl;
+    }
+  }
 
   if (success) {
     number_of_vertices = vertices.size();

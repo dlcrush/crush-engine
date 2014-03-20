@@ -4,15 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 class PPMReader {
+
 private:
 
 	std::string file;
+	std::vector<unsigned char> data;
 
 public:
 
-	PPMReader(std::string file);
+	PPMReader(std::string file2);
 
 	~PPMReader();
 
@@ -21,6 +24,7 @@ public:
 	std::string getFile();
 
 	unsigned char * read();
+	
 };
 
 #endif

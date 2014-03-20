@@ -50,7 +50,7 @@ void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2
     y_rot2 -= delta_rot2;
   }
 
-  light.set_position(-y_rot2, x_rot2, 1.0f);
+  light.set_position(-y_rot2, x_rot2, 2.0f);
   light.activate();
 }
 
@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
   Light light(program_id);
   light.set_position(1.0f, 1.0f, 1.0f);
   light.set_color(1.0f, 1.0f, 1.0f);
-  light.set_attenuation(0.5f);
+  light.set_attenuation(1.0f);
   light.activate();
 
   do {

@@ -28,8 +28,6 @@ void main() {
   // light vector
   light = normalize(light_position - vertex);
 
-  //light = normalize(vec3(5,5,5));
-
   // diffuse intensity
   NdotL = max(dot(normal, light), 0.0);
 
@@ -50,7 +48,7 @@ void main() {
   // distance from light to vector
   distance = pow(delta_x,2) + pow(delta_y,2) + pow(delta_z,2);
 
-  light_color2 = light_color * (1/ (distance * attenuation_amount));
+  light_color2 = light_color * (1.0 / (1.0 + (distance * attenuation_amount)));
 
   // specular
   specular = specular_coefficient_1f * specular_color_4f * light_color2 * pow(NdotR, 100);
