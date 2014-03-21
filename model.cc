@@ -87,7 +87,8 @@ void split(string input, string & face, string & normal, string & texture) {
 // loads Material file
 // PRE: mtlFile is defined, materials has been allocated space
 // POST: materials contains all the materials from the mtlFile
-void loadMtlFile(string mtlFile, vector<Material> & materials) {
+void loadMtlFile(string mtlFile, vector<Material> & materials,
+  unsigned char * texture) {
   ifstream inputFile(mtlFile.c_str());
 
   Material material;
@@ -154,7 +155,7 @@ void loadMtlFile(string mtlFile, vector<Material> & materials) {
 
       //PPMReader reader(fileName);
       PPMReader test(fileName);
-      test.read();
+      texture = test.read();
     }
   }
 
@@ -388,6 +389,11 @@ void Model::load(string objFileName, GLuint program_id) {
       delete[] verticeArray;
       delete[] normalArray;
     }
+
+    unsigned int texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glUniform1i(texture_sampler_id, 0);
   }
 }
 
@@ -432,6 +438,8 @@ void Model::draw(GLuint program_id) {
     glDrawArrays(GL_TRIANGLES, 0, sizes.at(i));
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
+
+    
   }
 }
 
