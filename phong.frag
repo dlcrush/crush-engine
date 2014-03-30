@@ -32,10 +32,13 @@ void main() {
   NdotR = max(dot(normal, reflection), 0.0);
 
   texture_color = texture2D(textureSampler, texture);
+  
+  //texture_color = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
   ambient_intensity = texture_color * ambient_color_4f * light_color;
   diffuse_intensity = NdotL * texture_color * diffuse_color_4f * light_color;
   specular_intensity = pow(NdotR, specular_coefficient_1f) * specular_color_4f * light_color;
 
   gl_FragColor = ambient_intensity + diffuse_intensity + specular_intensity;
+  //gl_FragColor = vec4(0.5f, 0.5f, 0.5f, 0.0f);
 }

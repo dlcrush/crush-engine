@@ -102,7 +102,7 @@ int main(int argc, char * argv[]) {
   GLuint program_id;                  // shader program handle
   
   Model model;
-  Window window(640,480,"shader");
+  Window window(640,480,"Engine");
 
   window.set_up_shaders("phong.vert", "phong.frag", program_id);
 

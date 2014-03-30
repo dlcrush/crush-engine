@@ -19,6 +19,7 @@ void main() {
   light = normalize(light_position - position);
   view = normalize(vec3(0,0,0) - position);
   texture = tex_coord_2f;
+  texture = vec2(0.0, 0.0);
 
   /*
   vec3 normal, light, vertex, view, reflection;

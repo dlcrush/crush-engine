@@ -28,7 +28,8 @@ void split(string input, string & face, string & normal, string & texture);
 // loads Material file
 // PRE: mtlFile is defined, materials has been allocated space
 // POST: materials contains all the materials from the mtlFile
-void loadMtlFile(string mtlFile, vector<Material> & materials);
+void loadMtlFile(string mtlFile, vector<Material> & materials,
+  unsigned char * texture);
 
 class Model {
 
@@ -43,6 +44,10 @@ private:
 	std::vector<int> material_vertex_map;
 	std::vector<Material> materials;
 	std::vector<int> sizes;
+	GLuint texture_id;
+	GLuint tex_coord_id;
+	GLuint tex_coord_buffer_id;
+	int texture_size;
 
 public:
 	
@@ -57,7 +62,7 @@ public:
 	void readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
   vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
   vector<GLfloat> &normals, vector<Material> &materials, 
-  vector<GLfloat> &textures,
+  vector<GLfloat> &textures, unsigned char * texture,
   vector<int> & materialIDs, vector<int> & material_vertex_map);
 
 	// PRE: vertices has been defined, points has been defined,
