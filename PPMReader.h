@@ -23,7 +23,7 @@ public:
 
 	std::string getFile();
 
-	unsigned char * read();
+	void read(unsigned char * & result, int & tex_size);
 	
 };
 

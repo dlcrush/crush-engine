@@ -5,6 +5,9 @@ attribute vec3 normal_3f; // vertex normal
 attribute vec2 tex_coord_2f;
 
 uniform vec3 light_position;
+uniform mat4 model_view_projection_matrix4f; // MVP Matrix
+uniform mat4 model_view_matrix4f;            // MV Matrix
+uniform mat4 normal_matrix4f;                // normal Matrix
 
 varying vec3 position; // vertex position, camera space
 varying vec3 normal;   // vertex normal, camera space
@@ -13,13 +16,22 @@ varying vec3 light;    // light vector, camera space
 varying vec2 texture;  // vertex texture coordinates
 
 void main() {
-  gl_Position = gl_ModelViewProjectionMatrix * vec4(vertex_3f, 1);
-  position = (gl_ModelViewMatrix * vec4(vertex_3f, 1)).xyz;
-  normal = normalize(gl_NormalMatrix * normal_3f);
+  gl_Position = model_view_projection_matrix4f * vec4(vertex_3f, 1);
+  //gl_Position = gl_ModelViewProjectionMatrix * vec4(vertex_3f, 1);
+  position = (model_view_matrix4f * vec4(vertex_3f, 1)).xyz;
+  //position = (gl_ModelViewMatrix * vec4(vertex_3f, 1)).xyz;
+  normal = normalize((normal_matrix4f * vec4(normal_3f, 0)).xyz);
+  //normal = normalize(gl_NormalMatrix * normal_3f);
   light = normalize(light_position - position);
   view = normalize(vec3(0,0,0) - position);
   texture = tex_coord_2f;
-  texture = vec2(0.0, 0.0);
+
+  // gl_Position = gl_ModelViewProjectionMatrix * vec4(vertex_3f, 1);
+  // position = (gl_ModelViewMatrix * vec4(vertex_3f, 1)).xyz;
+  // normal = normalize(gl_NormalMatrix * normal_3f);
+  // light = normalize(light_position - position);
+  // view = normalize(vec3(0,0,0) - position);
+  // texture = tex_coord_2f;
 
   /*
   vec3 normal, light, vertex, view, reflection;

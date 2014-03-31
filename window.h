@@ -144,5 +144,14 @@ public:
 		glUseProgram(program_id);
 	}
 
+	void close(unsigned int program_id) {
+		 // Deallocate buffer memory
+	    glDeleteProgram(program_id);
+	    
+	    // Close OpenGL window and terminate GLFW
+	    glfwTerminate();
+	    exit(EXIT_SUCCESS);
+	}
+
 };
 #endif

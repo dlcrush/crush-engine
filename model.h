@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include "material.h"
+#include "matrix.h"
 
 // Copies values in source vector to destination array
 // NOTE: destination needs to be allocated space before function call
@@ -29,7 +30,7 @@ void split(string input, string & face, string & normal, string & texture);
 // PRE: mtlFile is defined, materials has been allocated space
 // POST: materials contains all the materials from the mtlFile
 void loadMtlFile(string mtlFile, vector<Material> & materials,
-  unsigned char * texture);
+  unsigned char * & texture);
 
 class Model {
 
@@ -48,12 +49,16 @@ private:
 	GLuint tex_coord_id;
 	GLuint tex_coord_buffer_id;
 	int texture_size;
+	GLuint ambient_id, diffuse_id, specular_id, specular_coefficient_id,
+		texture_sampler_id, model_view_projection_matrix_id, model_view_matrix_id,
+		normal_matrix_id;
+	GLuint program_id;
 
 public:
 	
 	// PRE:
 	// POST:
-	Model();
+	Model(GLuint program_id);
 
 	// PRE:
 	// POST: All glBuffers have been deleted.
@@ -62,7 +67,7 @@ public:
 	void readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
   vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
   vector<GLfloat> &normals, vector<Material> &materials, 
-  vector<GLfloat> &textures, unsigned char * texture,
+  vector<GLfloat> &textures, unsigned char * & texture,
   vector<int> & materialIDs, vector<int> & material_vertex_map);
 
 	// PRE: vertices has been defined, points has been defined,
@@ -80,13 +85,13 @@ public:
 	// .obj file.
 	// POST: The vertices for the obj file have been loaded and binded to 
 	// vertex_buffer_id.
-	void load(std::string objFileName, GLuint program_id);
+	void load(std::string objFileName);
 
 	// PRE: This is defined. vertex_buffer_id is a valid buffer binded to an
 	// an array of vertices. color_buffer_id is a valid buffer binded to an
 	// array of colors.
 	// POST: The model has been drawn to the screen. 
-	void draw(GLuint program_id);
+	void draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, Matrix normal_matrix);
 
 	// Deletes the buffers from memory
 	void clear();

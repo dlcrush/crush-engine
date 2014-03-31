@@ -88,7 +88,7 @@ void split(string input, string & face, string & normal, string & texture) {
 // PRE: mtlFile is defined, materials has been allocated space
 // POST: materials contains all the materials from the mtlFile
 void loadMtlFile(string mtlFile, vector<Material> & materials,
-  unsigned char * texture) {
+  unsigned char * & texture) {
   ifstream inputFile(mtlFile.c_str());
 
   Material material;
@@ -155,9 +155,13 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
 
       //PPMReader reader(fileName);
       PPMReader test(fileName);
-      texture = test.read();
+      int tex_size = 0;
+      texture = new unsigned char[10];
+      test.read(texture, tex_size);
+      //cout << tex_size << endl;
+      //texture = test.read();
       for (int i = 0; i < 10; i ++) {
-        cout << texture[i] << endl;
+        //cout << (int) texture[i] << endl;
       }
     }
   }
@@ -167,8 +171,23 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
   }
 }
 
-Model::Model() {
+Model::Model(GLuint program_id) {
+  this->program_id = program_id;
 
+  ambient_id = glGetUniformLocation(program_id, 
+      "ambient_color_4f");
+  diffuse_id = glGetUniformLocation(program_id, 
+    "diffuse_color_4f");
+  specular_id = glGetUniformLocation(program_id, 
+    "specular_color_4f");
+  specular_coefficient_id = glGetUniformLocation(program_id, 
+    "specular_coefficient_1f");
+  texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
+
+
+  model_view_projection_matrix_id = glGetUniformLocation(program_id, "model_view_projection_matrix4f");
+  model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
+  normal_matrix_id = glGetUniformLocation(program_id, "normal_matrix4f");
 }
 
 // PRE:
@@ -201,7 +220,7 @@ void Model::addFaceVertex(vector<GLfloat> & vertices,
 void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
   vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
   vector<GLfloat> &normals, vector<Material> &materials, 
-  vector<GLfloat> &textures, unsigned char * texture,
+  vector<GLfloat> &textures, unsigned char * & texture,
   vector<int> & materialIDs, vector<int> & material_vertex_map) {
 
   while (inputFile.good()) {
@@ -294,7 +313,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
 // .obj file.
 // POST: The vertices for the obj file have been loaded and binded to 
 // vertex_buffer_id.
-void Model::load(string objFileName, GLuint program_id) {
+void Model::load(string objFileName) {
   vector<GLfloat> points;
   vector<GLfloat> vertices;
   vector<GLfloat> vn;
@@ -401,8 +420,6 @@ void Model::load(string objFileName, GLuint program_id) {
 
     tex_coord_id = glGetAttribLocation(program_id, "tex_coord_2f");
 
-    cout << "tex_coord_id " << tex_coord_id << endl;
-
     // unsigned int texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
     // glActiveTexture(GL_TEXTURE0);
     // glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -419,7 +436,7 @@ void Model::load(string objFileName, GLuint program_id) {
 
     glGenBuffers(1, &tex_coord_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-    glBufferData(GL_ARRAY_BUFFER, 6, &tex_coords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, texture_size, textureArray, GL_STATIC_DRAW);
 
     // glGenTextures(1, &texture_id);
     // glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -437,7 +454,15 @@ void Model::load(string objFileName, GLuint program_id) {
                   255, 255, 0,
                   0,   0,   0};
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 2, 0, GL_RGB, GL_UNSIGNED_BYTE, &texture_data);
+    // cout << "-------------------------------------" << endl;
+
+    // for (int i = 0; i < 256 * 256; i ++) {
+    //   cout << (int) texture[i] << endl;
+    // }
+
+    // cout << "--------------------------------------" << endl;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   }
@@ -447,7 +472,7 @@ void Model::load(string objFileName, GLuint program_id) {
 // an array of vertices. color_buffer_id is a valid buffer binded to an
 // array of colors.
 // POST: The model has been drawn to the screen. 
-void Model::draw(GLuint program_id) {
+void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, Matrix normal_matrix) {
   
   for (int i = 0; i < vertex_id.size(); i ++) {
 
@@ -460,20 +485,29 @@ void Model::draw(GLuint program_id) {
     GLfloat * Ks = material->get_Ks();
     GLfloat Ns = material->get_Ns();
 
-    GLuint ambient_id = glGetUniformLocation(program_id, 
-      "ambient_color_4f");
+    //GLuint ambient_id = glGetUniformLocation(program_id, 
+    //  "ambient_color_4f");
     glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
-    GLuint diffuse_id = glGetUniformLocation(program_id, 
-      "diffuse_color_4f");
+    //GLuint diffuse_id = glGetUniformLocation(program_id, 
+    //  "diffuse_color_4f");
     glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
-    GLuint specular_id = glGetUniformLocation(program_id, 
-      "specular_color_4f");
+    //GLuint specular_id = glGetUniformLocation(program_id, 
+    //  "specular_color_4f");
     glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
-    GLuint specular_coefficient_id = glGetUniformLocation(program_id, 
-      "specular_coefficient_1f");
+    //GLuint specular_coefficient_id = glGetUniformLocation(program_id, 
+    //  "specular_coefficient_1f");
     glUniform1f(specular_coefficient_id, Ns);
-    GLuint texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
+    //GLuint texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
     glUniform1i(texture_sampler_id, 0);
+
+
+    //GLuint model_view_projection_matrix_id = glGetUniformLocation(program_id, "model_view_projection_matrix4f");
+    //GLuint model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
+    //GLuint normal_matrix_id = glGetUniformLocation(program_id, "normal_matrix4f");
+
+    glUniformMatrix4fv(model_view_projection_matrix_id, 1, GL_TRUE, model_view_projection_matrix.data());
+    glUniformMatrix4fv(model_view_matrix_id, 1, GL_TRUE, model_view_matrix.data());
+    glUniformMatrix4fv(normal_matrix_id, 1, GL_TRUE, normal_matrix.data());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -493,7 +527,7 @@ void Model::draw(GLuint program_id) {
 
     glEnableVertexAttribArray(tex_coord_id);
     glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-    glVertexAttribPointer(texture_id, 2, GL_FLOAT, GL_FALSE, 
+    glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
       0, NULL);
     //glDrawArrays(GL_TRIANGLES, 0, texture_size);
 
@@ -504,6 +538,7 @@ void Model::draw(GLuint program_id) {
 
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
+    glDisableVertexAttribArray(tex_coord_id);
     //glDisableVertexAttribArray(texture_id);
 
     
