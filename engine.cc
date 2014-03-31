@@ -42,7 +42,7 @@ int main(int argc, char * argv[]) {
   int width, height;
   float ratio;
 
-  window.set_up_shaders("shader.vert", "shader.frag", program_id);
+  window.set_up_shaders("shaders/shader.vert", "shaders/shader.frag", program_id);
 
   Model model(program_id);
   model.load(fileToLoad);
