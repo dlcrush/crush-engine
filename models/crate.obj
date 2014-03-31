@@ -1,6 +1,6 @@
 # Blender v2.69 (sub 0) OBJ File: 'Crate1.blend'
 # www.blender.org
-mtllib crate.mtl
+mtllib models/crate.mtl
 o Cube_Cube.002
 v -1.000000 -1.000000 1.000000
 v -1.000000 -1.000000 -1.000000

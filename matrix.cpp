@@ -5,6 +5,8 @@
 #include <GL/glfw.h>
 using namespace std;
 
+// Returns cotangent of angle i
+// NOTE: i is expected to be in radians
 float cotan(float i) { 
 	return(1.0f / tan(i));
 }

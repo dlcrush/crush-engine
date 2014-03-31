@@ -18,8 +18,6 @@ varying vec3 light;    // light vector, camera space
 varying vec2 texture;  // vertex texture coordinates
 
 void main() {
-  //gl_FragColor = gl_Color;
-
   float NdotL, NdotR;      // diffuse and specular factors
   vec3 reflection;         // reflection vector
   vec4 texture_color;      // texture color
@@ -33,12 +31,9 @@ void main() {
 
   texture_color = texture2D(textureSampler, texture);
   
-  //texture_color = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-
   ambient_intensity = texture_color * ambient_color_4f * light_color;
   diffuse_intensity = NdotL * texture_color * diffuse_color_4f * light_color;
   specular_intensity = pow(NdotR, specular_coefficient_1f) * specular_color_4f * light_color;
 
   gl_FragColor = ambient_intensity + diffuse_intensity + specular_intensity;
-  //gl_FragColor = vec4(0.5f, 0.5f, 0.5f, 0.0f);
 }

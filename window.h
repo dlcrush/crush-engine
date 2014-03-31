@@ -80,7 +80,7 @@ public:
 
 		// Load and compile vertex shader
 		vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-		vertex_shader_source = read_file("phong.vert");
+		vertex_shader_source = read_file(vertex_shader.c_str());
 		glShaderSource(vertex_shader_id, 1, &vertex_shader_source, NULL);
 		delete[] vertex_shader_source;
 		glCompileShader(vertex_shader_id);
@@ -101,7 +101,7 @@ public:
 
 		// Load and compile fragment shader
 		fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-		fragment_shader_source = read_file("phong.frag");
+		fragment_shader_source = read_file(fragment_shader.c_str());
 		glShaderSource(fragment_shader_id, 1, &fragment_shader_source, NULL);
 		delete[] fragment_shader_source;
 		glCompileShader(fragment_shader_id);
@@ -151,6 +151,11 @@ public:
 	    // Close OpenGL window and terminate GLFW
 	    glfwTerminate();
 	    exit(EXIT_SUCCESS);
+	}
+
+	bool isOpen() {
+		return glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS &&
+        	glfwGetWindowParam(GLFW_OPENED);
 	}
 
 };

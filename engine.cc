@@ -17,9 +17,11 @@
 #include "matrix.h"
 #include <iostream>
 
+#define DELTA_ROT 0.05f
+
 using namespace std;
 
-// Main method of shader program
+// Main method of engine program
 int main(int argc, char * argv[]) {
   if (argc < 2) {
       cout << "Please specify which .obj to load" << endl;
@@ -28,10 +30,10 @@ int main(int argc, char * argv[]) {
 
   float x_rot = 0.0f;         // X rotation scaling factor
   float y_rot = 0.0f;         // Y rotation scaling factor
-  float delta_rot = 0.05f;     // Ammount rotation changes on key press
-  float x_rot2 = -1.0f;         // X rotation scaling factor
-  float y_rot2 = -1.0f;         // Y rotation scaling factor
-  float delta_rot2 = 0.05f; 
+  float delta_rot = DELTA_ROT;     // Ammount rotation changes on key press
+  float x_rot2 = 0.0f;         // X rotation scaling factor
+  float y_rot2 = 0.0f;         // Y rotation scaling factor
+  float delta_rot2 = DELTA_ROT; 
   string fileToLoad = argv[1];
 
   GLuint program_id;                  // shader program handle
@@ -40,7 +42,7 @@ int main(int argc, char * argv[]) {
   int width, height;
   float ratio;
 
-  window.set_up_shaders("phong.vert", "phong.frag", program_id);
+  window.set_up_shaders("shader.vert", "shader.frag", program_id);
 
   Model model(program_id);
   model.load(fileToLoad);
@@ -181,12 +183,11 @@ int main(int argc, char * argv[]) {
 
       model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
 
+
       // Swap buffers
       glfwSwapBuffers();
-
     } // Check if the ESC key was pressed or the window was closed
-    while(glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS &&
-           glfwGetWindowParam(GLFW_OPENED));
+    while(window.isOpen());
 
     window.close(program_id);
 }
