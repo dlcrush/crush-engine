@@ -1,4 +1,4 @@
-crush-game
+crush-engine
 ==========
 
 A simple openGL game engine.
