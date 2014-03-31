@@ -1,7 +1,7 @@
 #ifndef INCLUDED_CAMERA
 #define INCLUDED_CAMERA
 
-#include "matrix.h"
+#include "src/matrix.h"
 
 class Camera {
 private:
