@@ -49,12 +49,13 @@ int main(int argc, char * argv[]) {
   Model model(program_id);
   model.load(fileToLoad);
   Light light(program_id);
-  light.set_position(1.0f, 1.0f, 1.0f);
+  light.set_position(0.0f, 0.0f, 3.0f);
   light.set_color(1.0f, 1.0f, 1.0f);
   light.set_attenuation(1.0f);
   light.activate();
 
-  Camera camera;
+  Camera camera; // camera object
+  // clone objects
   Clone clone1(&model, &camera);
   Clone clone2(&model, &camera);
   Clone clone3(&model, &camera);
@@ -70,8 +71,8 @@ int main(int argc, char * argv[]) {
   Clone clone13(&model, &camera);
   Clone clone14(&model, &camera);
   Clone clone15(&model, &camera);
-  Clone clone16(&model, &camera);
 
+  // translate clones
   clone1.translate(-5.0f, 0.0f, -3.0f);
   clone2.translate(0.0f, 0.0f, -3.0f);
   clone3.translate(5.0f, 0.0f, -3.0f);
@@ -82,12 +83,11 @@ int main(int argc, char * argv[]) {
   clone8.translate(-5.0f, 5.0f, -3.0f);
   clone9.translate(-5.0f, -5.0f, -3.0f);
   clone10.translate(-10.0f, -5.0f, -3.0f);
-  clone11.translate(-10.0f, -0.0f, -3.0f);
+  clone11.translate(-10.0f, 0.0f, -3.0f);
   clone12.translate(-10.0f, 5.0f, -3.0f);
   clone13.translate(10.0f, -5.0f, -3.0f);
   clone14.translate(10.0f, 5.0f, -3.0f);
   clone15.translate(10.0f, 0.0f, -3.0f);
-  clone16.translate(0.0f, 0.0f, 0.0f);
 
   //cout << projection_matrix << endl;
 
@@ -114,7 +114,9 @@ int main(int argc, char * argv[]) {
       clone13.rotate(x_rot, y_rot, 0.0f);
       clone14.rotate(x_rot, y_rot, 0.0f);
       clone15.rotate(x_rot, y_rot, 0.0f);
-      clone16.rotate(x_rot, y_rot, 0.0f);
+
+      // y_rot2 and x_rot2 are weird right now
+      camera.translate(-y_rot2, x_rot2, 0.0f);
 
       clone1.draw(projection_matrix);
       clone2.draw(projection_matrix);
@@ -131,7 +133,6 @@ int main(int argc, char * argv[]) {
       clone13.draw(projection_matrix);
       clone14.draw(projection_matrix);
       clone15.draw(projection_matrix);
-      clone16.draw(projection_matrix);
 
       glfwSwapBuffers();
 

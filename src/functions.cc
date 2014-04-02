@@ -40,8 +40,8 @@ void process_input(float & x_rot, float & y_rot, float delta_rot, float & x_rot2
     y_rot2 -= delta_rot2;
   }
 
-  light.set_position(-y_rot2, x_rot2, 3.0f);
-  light.activate();
+  //light.set_position(-y_rot2, x_rot2, 3.0f);
+  //light.activate();
 }
 
 // Handles the processing for the current view
