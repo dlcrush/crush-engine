@@ -6,6 +6,8 @@
 class Camera {
 private:
 	Matrix view_matrix;
+	Matrix rotate_matrix;
+	Matrix translate_matrix;
 public:
 	Camera();
 

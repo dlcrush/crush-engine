@@ -348,8 +348,6 @@ void Model::load(string objFileName) {
     }
   }
 
-  
-
   if (success) {
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;

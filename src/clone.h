@@ -10,6 +10,8 @@ private:
 	Model * model;
 	Camera * camera;
 	Matrix model_matrix;
+	Matrix translate_matrix;
+	Matrix rotate_matrix;
 public:
 	Clone(Model * model, Camera * clone);
 

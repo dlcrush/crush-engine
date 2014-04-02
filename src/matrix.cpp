@@ -11,6 +11,8 @@ float cotan(float i) {
 	return(1.0f / tan(i));
 }
 
+// constructor
+// initialzes matrix to 4x4 matrix containing zeros.
 Matrix::Matrix() {
 	for (int i = 0; i < 4; i ++) {
 		for (int j = 0; j < 4; j++) {
@@ -19,6 +21,7 @@ Matrix::Matrix() {
 	}
 }
 
+// returns normalized matrix
 Matrix Matrix::normalMatrix() const {
     Matrix normal = identity();
 
@@ -51,7 +54,8 @@ Matrix Matrix::normalMatrix() const {
     return normal;
 }
 
-
+// constructor
+// takes two dimensional of size 4 with each internal array having size 4
 Matrix::Matrix(float matrixArray[4][4] ) {
 	for (int i = 0; i < 4; i ++) {
 		for (int j = 0; j < 4; j++) {
@@ -60,6 +64,7 @@ Matrix::Matrix(float matrixArray[4][4] ) {
 	}
 }
 
+// Returns the identity matrix
 Matrix Matrix::identity() {
 	Matrix identity2;
 
@@ -74,12 +79,9 @@ Matrix Matrix::identity() {
 	return identity2;
 }
 
-
-/*
-void Matrix::swap(Matrix& first, Matrix& second) {
-    swap(first.matrix, second.matrix); 
-}*/
-
+// multiplies two matrices together
+// l is the matrix of the left side of the multiplication
+// r is the matrix on the right side of the muliplication
 Matrix Matrix::multiply(const Matrix l, const Matrix r) {
 	Matrix result;
 
@@ -94,14 +96,16 @@ Matrix Matrix::multiply(const Matrix l, const Matrix r) {
 	return result;
 }
 
+// overrides * operator
+// x is matrix on the left side of the multiplication
+// y is matrix on the right side of the multiplication
 Matrix operator* (const Matrix& x, const Matrix& y) {
     return Matrix::multiply(x,y);
 }
 
+// returns ortho matrix
 Matrix Matrix::ortho(float left, float right, float bottom, float top, float nearVal, float farVal) {
-
 	Matrix test;
-
 
 	test.matrix[0][0] = 2.0/(right - left);
 	test.matrix[1][1] = 2.0/(top - bottom);
@@ -128,6 +132,8 @@ Matrix Matrix::perspective(float fovy, float aspect, float zNear, float zFar) {
 	return returnMatrix;
 }
 
+// scales the matrix
+// NOTE: Needs to be completed
 void Matrix::scale(float x, float y, float z) {
 	// for (int i = 0; i < 4; i ++) {
 	// 	matrix[i][0] *= x;
@@ -136,18 +142,7 @@ void Matrix::scale(float x, float y, float z) {
 	// }
 }
 
-/*
-Matrix& operator=(Matrix other) {
-    for (int i = 0; i < 4; i ++) {
-		for (int j = 0; j < 4; j++) {
-			matrix[i][j] = other.matrix[i][j];
-		}
-	}
-
-	return &this;
-}
-*/
-
+// overrides the << operator
 ostream& operator<<(ostream& out, const Matrix& temp){
 	std::streamsize p = out.precision();
 	out.precision(5);
@@ -164,7 +159,7 @@ ostream& operator<<(ostream& out, const Matrix& temp){
 	return out;
 }
 
-
+// returns rotation matrix for x direction
 Matrix Matrix::rotateX(float angle) {
 	float rx[4][4]  = {{1,          0,           0, 0},
 					   {0, cos(angle), -sin(angle), 0},
@@ -173,6 +168,7 @@ Matrix Matrix::rotateX(float angle) {
 	return Matrix(rx);
 }
 
+// returns rotation matrix for y direction
 Matrix Matrix::rotateY(float angle) {
 	float ry[4][4]  = {{cos(angle), 0, -sin(angle), 0},
 					  {0,           1, 0,           0},
@@ -181,6 +177,7 @@ Matrix Matrix::rotateY(float angle) {
 	return Matrix(ry);
 }
 
+// returns rotation matrix for z direction
 Matrix Matrix::rotateZ(float angle) {
 	float rz[4][4]  = {{cos(angle), -sin(angle), 0, 0},
 					  {sin(angle),  cos(angle),  0, 0},
@@ -189,7 +186,7 @@ Matrix Matrix::rotateZ(float angle) {
 	return Matrix(rz);
 }
 
-
+// returns translation matrix for x, y, and z directions.
 Matrix Matrix::translate(float x, float y, float z) {
 	float result[4][4] = {{1, 0, 0, x},
 						  {0, 1, 0, y},
@@ -205,6 +202,8 @@ Matrix Matrix::quaternionRotate(float x, float y, float z, float w) {
 	return Matrix(result);
 }
 
+// returns one dimensional array representation of matrix
+// Note: general solution to access elements is row * 4 + col
 float * Matrix::data() {
 	float * returnArray = new float[4 * 4];
 

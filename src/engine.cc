@@ -116,7 +116,7 @@ int main(int argc, char * argv[]) {
       clone15.rotate(x_rot, y_rot, 0.0f);
 
       // y_rot2 and x_rot2 are weird right now
-      camera.translate(-y_rot2, x_rot2, 0.0f);
+      camera.translate(-y_rot2, 0.0f, x_rot2);
 
       clone1.draw(projection_matrix);
       clone2.draw(projection_matrix);
@@ -135,120 +135,6 @@ int main(int argc, char * argv[]) {
       clone15.draw(projection_matrix);
 
       glfwSwapBuffers();
-
-      /*
-      //Matrix projection_matrix = Matrix::perspective(27.0f, ratio, 0.1f, 10.0f);
-      Matrix view_matrix = Matrix::identity() * Matrix::translate(0.0f, 0.0f, -5.0f);
-      Matrix model_matrix = Matrix::translate(-5.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      Matrix model_view_matrix = view_matrix * model_matrix;
-      Matrix model_view_projection_matrix = projection_matrix * model_view_matrix;
-      Matrix normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(0.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(5.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(5.0f, 5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(5.0f, -5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(0.0f, -5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(0.0f, 5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(-5.0f, 5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(-5.0f, -5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(-10.0f, -5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(-10.0f, -0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(-10.0f, 5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(10.0f, -5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(10.0f, 5.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-
-      model_matrix = Matrix::translate(10.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
-      model_view_matrix = view_matrix * model_matrix;
-      model_view_projection_matrix = projection_matrix * model_view_matrix;
-      normal_matrix = model_view_matrix.normalMatrix();
-
-      model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
-      
-
-      // Swap buffers
-      glfwSwapBuffers();
-
-      */
     } // Check if the ESC key was pressed or the window was closed
     while(window.isOpen());
 
