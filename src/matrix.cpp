@@ -128,6 +128,14 @@ Matrix Matrix::perspective(float fovy, float aspect, float zNear, float zFar) {
 	return returnMatrix;
 }
 
+void Matrix::scale(float x, float y, float z) {
+	// for (int i = 0; i < 4; i ++) {
+	// 	matrix[i][0] *= x;
+	// 	matrix[i][1] *= y;
+	// 	matrix[i][2] *= z;
+	// }
+}
+
 /*
 Matrix& operator=(Matrix other) {
     for (int i = 0; i < 4; i ++) {

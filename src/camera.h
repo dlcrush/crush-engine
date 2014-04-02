@@ -1,11 +1,11 @@
 #ifndef INCLUDED_CAMERA
 #define INCLUDED_CAMERA
 
-#include "src/matrix.h"
+#include "matrix.h"
 
 class Camera {
 private:
-
+	Matrix view_matrix;
 public:
 	Camera();
 
@@ -14,6 +14,8 @@ public:
 	void translate(float x, float y, float z);
 
 	void rotate(float x, float y, float z);
+
+	Matrix getViewMatrix();
 };
 
 #endif

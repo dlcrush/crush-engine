@@ -31,6 +31,8 @@ public:
 
 	static Matrix rotateZ(float angle);
 
+	void scale(float x, float y, float z);
+
 	static Matrix multiply(Matrix l, Matrix r);
 
 	static Matrix translate(float x, float y, float z);

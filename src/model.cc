@@ -88,7 +88,7 @@ void split(string input, string & face, string & normal, string & texture) {
 // PRE: mtlFile is defined, materials has been allocated space
 // POST: materials contains all the materials from the mtlFile
 void loadMtlFile(string mtlFile, vector<Material> & materials,
-  unsigned char * & texture) {
+  unsigned char * & texture, int & tex_width, int & tex_height) {
   ifstream inputFile(mtlFile.c_str());
 
   Material material;
@@ -157,7 +157,7 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
       PPMReader test(fileName);
       int tex_size = 0;
       texture = new unsigned char[10];
-      test.read(texture, tex_size);
+      test.read(texture, tex_size, tex_width, tex_height);
       //cout << tex_size << endl;
       //texture = test.read();
       for (int i = 0; i < 10; i ++) {
@@ -173,7 +173,8 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
 
 Model::Model(GLuint program_id) {
   this->program_id = program_id;
-
+  tex_width = 0;
+  tex_height = 0;
   ambient_id = glGetUniformLocation(program_id, 
       "ambient_color_4f");
   diffuse_id = glGetUniformLocation(program_id, 
@@ -259,7 +260,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
 
       inputFile >> mtlFile;
 
-      loadMtlFile(mtlFile, materials, texture);
+      loadMtlFile(mtlFile, materials, texture, tex_width, tex_height);
     }
     else if (type.compare("usemtl") == 0) {
       string mtlName;
@@ -446,7 +447,9 @@ void Model::load(string objFileName) {
     for (int i = 0; i < 196605; i ++) {
       //cout << texture[i] << endl;
     }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+    cout << tex_width << endl;
+    cout << tex_height << endl;
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   }
@@ -456,7 +459,7 @@ void Model::load(string objFileName) {
 // an array of vertices. color_buffer_id is a valid buffer binded to an
 // array of colors.
 // POST: The model has been drawn to the screen. 
-void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, Matrix normal_matrix) {
+void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matrix) {
   
   //glActiveTexture(GL_TEXTURE0);
   //glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -483,6 +486,10 @@ void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, 
     glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
     glUniform1f(specular_coefficient_id, Ns);
     glUniform1i(texture_sampler_id, 0);
+
+    Matrix model_view_matrix = view_matrix * model_matrix;
+    Matrix model_view_projection_matrix = projection_matrix * model_view_matrix;
+    Matrix normal_matrix = model_view_matrix.normalMatrix();
 
     glUniformMatrix4fv(model_view_projection_matrix_id, 1, GL_TRUE, model_view_projection_matrix.data());
     glUniformMatrix4fv(model_view_matrix_id, 1, GL_TRUE, model_view_matrix.data());

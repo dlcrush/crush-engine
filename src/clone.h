@@ -3,19 +3,19 @@
 
 #include "matrix.h"
 #include "model.h"
+#include "camera.h"
 
 class Clone {
 private:
-	Model model;
-	Matrix model_view_projection_matrix;
-	Matrix model_view_matrix;
-	Matrix normal_matrix;
+	Model * model;
+	Camera * camera;
+	Matrix model_matrix;
 public:
-	Clone(Model * model);
+	Clone(Model * model, Camera * clone);
 
 	~Clone();
 
-	void draw();
+	void draw(Matrix projection_matrix);
 
 	void translate(float x, float y, float z);
 

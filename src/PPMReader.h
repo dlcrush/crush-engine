@@ -25,7 +25,7 @@ public:
 
 	std::string getFile();
 
-	void read(unsigned char * & result, int & tex_size);
+	void read(unsigned char * & result, int & tex_size, int & tex_width, int & tex_height);
 	
 };
 

@@ -46,8 +46,8 @@ void PPMReader::read(unsigned char * & result, int & tex_size, int & tex_width, 
 	// TODO
 	ifstream inputFile(file); // open fstream
 	bool done = ! inputFile.good(); // check to see if fstream is good
-	int width, height;
-	readHeader(inputFile, width, height);
+	//int width, height;
+	readHeader(inputFile, tex_width, tex_height);
 	cout << tex_width << endl;
 	cout << tex_height << endl;
 	while (! done) {

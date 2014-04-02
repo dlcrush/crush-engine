@@ -48,6 +48,8 @@ private:
 	GLuint texture_id;
 	GLuint tex_coord_id;
 	GLuint tex_coord_buffer_id;
+	int tex_width;
+	int tex_height;
 	int texture_size;
 	GLuint ambient_id, diffuse_id, specular_id, specular_coefficient_id,
 		texture_sampler_id, model_view_projection_matrix_id, model_view_matrix_id,

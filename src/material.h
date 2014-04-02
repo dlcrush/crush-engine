@@ -18,6 +18,7 @@ private:
 	GLfloat Kd_r, Kd_g, Kd_b;
 	GLfloat Ks_r, Ks_g, Ks_b;
 	GLfloat Ns;
+	bool hasTexture;
 public:
 
 	// Constructor
