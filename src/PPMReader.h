@@ -13,6 +13,8 @@ private:
 	std::string file;
 	std::vector<unsigned char> data;
 
+	void readHeader(std::ifstream & inputFile, int & width, int & height);
+
 public:
 
 	PPMReader(std::string file2);

@@ -75,7 +75,7 @@ int main(int argc, char * argv[]) {
       ratio = width / (float) height;
       //Matrix projection_matrix = Matrix::perspective(27.0f, ratio, 0.1f, 10.0f);
       Matrix projection_matrix = Matrix::ortho(-10.0 * ratio, 10.0 * ratio, -10.0f, 10.0f, -10.0f, 10.0f);
-      Matrix view_matrix = Matrix::identity();
+      Matrix view_matrix = Matrix::identity() * Matrix::translate(0.0f, 0.0f, 1.0f);
       Matrix model_matrix = Matrix::translate(-5.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
       Matrix model_view_matrix = view_matrix * model_matrix;
       Matrix model_view_projection_matrix = projection_matrix * model_view_matrix;
@@ -83,8 +83,6 @@ int main(int argc, char * argv[]) {
 
       model.draw(model_view_projection_matrix, model_view_matrix, normal_matrix);
 
-      //projection_matrix = Matrix::ortho(-10.0 * ratio, 10.0 * ratio, -10.0f, 10.0f, -10.0f, 10.0f);
-      //view_matrix = Matrix::identity();
       model_matrix = Matrix::translate(0.0f, 0.0f, -3.0f) * Matrix::rotateX(x_rot) * Matrix::rotateY(y_rot);
       model_view_matrix = view_matrix * model_matrix;
       model_view_projection_matrix = projection_matrix * model_view_matrix;

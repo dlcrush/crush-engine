@@ -415,54 +415,38 @@ void Model::load(string objFileName) {
       delete[] normalArray;
     }
 
-    //texture_id = glGetAttribLocation(program_id, 
-    //    "vertex_3f");
-
     tex_coord_id = glGetAttribLocation(program_id, "tex_coord_2f");
 
-    // unsigned int texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture_id);
-    // glUniform1i(texture_sampler_id, 0);
+    int count = 0;
+    for (int i = 0; i < textures.size() - 1; i += 2) {
+      count ++;
+      cout << textures.at(i) << " " << textures.at(i + 1) << endl;
+      if (count % 3 == 0) {
+        cout << endl;
+      }
+    }
 
     GLfloat * textureArray = new GLfloat[textures.size()];
-    //copyVectorToArray(textures,textureArray,material_vertex_map,i);
     copy(textures.begin(), textures.end(), textureArray);
     texture_size = textures.size();
+    cout << texture_size << endl;
 
-    GLfloat tex_coords[] = {0.0f, 0.0f,       // vertex texture coords
-          1.0f, 0.0f,
-          0.5f, 1.0f};
+    // for (int i = 0; i < textures.size() - 1; i += 2) {
+    //   count ++;
+    //   cout << textureArray.at(i) << " " << textures.at(i + 1) << endl;
+    //   if (count % 3 == 0) {
+    //     cout << endl;
+    //   }
+    // }
 
     glGenBuffers(1, &tex_coord_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-    glBufferData(GL_ARRAY_BUFFER, texture_size, textureArray, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, texture_size * 4, textureArray, GL_STATIC_DRAW);
 
-    // glGenTextures(1, &texture_id);
-    // glBindTexture(GL_TEXTURE_2D, texture_id);
-    //cout << "texture_size " << texture_size << endl;
-    // for (int i = 0; i < 1; i ++) {
-    //   cout << (int) texture[i] << endl;
-    // }
-
-    unsigned char texture_data[24] = {255, 0,   0,
-                  0,   255, 0,
-                  0,   0,   255,
-                  255, 255, 255,
-                  0,   255, 255,
-                  255, 0,   255,
-                  255, 255, 0,
-                  0,   0,   0};
-
-    // cout << "-------------------------------------" << endl;
-
-    // for (int i = 0; i < 256 * 256; i ++) {
-    //   cout << (int) texture[i] << endl;
-    // }
-
-    // cout << "--------------------------------------" << endl;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+    for (int i = 0; i < 196605; i ++) {
+      //cout << texture[i] << endl;
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   }
@@ -474,8 +458,17 @@ void Model::load(string objFileName) {
 // POST: The model has been drawn to the screen. 
 void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, Matrix normal_matrix) {
   
-  for (int i = 0; i < vertex_id.size(); i ++) {
+  //glActiveTexture(GL_TEXTURE0);
+  //glBindTexture(GL_TEXTURE_2D, texture_id);
 
+  glEnableVertexAttribArray(tex_coord_id);
+  glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
+  glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
+    0, NULL);
+
+  //cout << vertex_id.size() << endl;
+
+  for (int i = 0; i < vertex_id.size(); i ++) {
     int current_material_id = materialIDs.at(i);
 
     Material * material = &(materials.at(current_material_id));
@@ -485,32 +478,15 @@ void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, 
     GLfloat * Ks = material->get_Ks();
     GLfloat Ns = material->get_Ns();
 
-    //GLuint ambient_id = glGetUniformLocation(program_id, 
-    //  "ambient_color_4f");
     glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
-    //GLuint diffuse_id = glGetUniformLocation(program_id, 
-    //  "diffuse_color_4f");
     glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
-    //GLuint specular_id = glGetUniformLocation(program_id, 
-    //  "specular_color_4f");
     glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
-    //GLuint specular_coefficient_id = glGetUniformLocation(program_id, 
-    //  "specular_coefficient_1f");
     glUniform1f(specular_coefficient_id, Ns);
-    //GLuint texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
     glUniform1i(texture_sampler_id, 0);
-
-
-    //GLuint model_view_projection_matrix_id = glGetUniformLocation(program_id, "model_view_projection_matrix4f");
-    //GLuint model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
-    //GLuint normal_matrix_id = glGetUniformLocation(program_id, "normal_matrix4f");
 
     glUniformMatrix4fv(model_view_projection_matrix_id, 1, GL_TRUE, model_view_projection_matrix.data());
     glUniformMatrix4fv(model_view_matrix_id, 1, GL_TRUE, model_view_matrix.data());
     glUniformMatrix4fv(normal_matrix_id, 1, GL_TRUE, normal_matrix.data());
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
 
     glEnableVertexAttribArray(vertex_id.at(i));
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
@@ -522,27 +498,14 @@ void Model::draw(Matrix model_view_projection_matrix, Matrix model_view_matrix, 
     glVertexAttribPointer(normal_id.at(i), 3, GL_FLOAT, GL_FALSE, 
       0, NULL);
 
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture_id);
-
-    glEnableVertexAttribArray(tex_coord_id);
-    glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-    glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
-      0, NULL);
-    //glDrawArrays(GL_TRIANGLES, 0, texture_size);
-
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, texture_id);
-
     glDrawArrays(GL_TRIANGLES, 0, sizes.at(i));
 
     glDisableVertexAttribArray(vertex_id.at(i));
     glDisableVertexAttribArray(normal_id.at(i));
-    glDisableVertexAttribArray(tex_coord_id);
-    //glDisableVertexAttribArray(texture_id);
-
     
   }
+
+  glDisableVertexAttribArray(tex_coord_id);
 }
 
 // Deletes the buffers from memory
