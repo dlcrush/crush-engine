@@ -1,6 +1,6 @@
 # 
 # 
-mtllib Earth.mtl
+mtllib models/Earth.mtl
 o atmosphere
 v -0.044550 -0.478535 -0.061317
 v -0.023421 -0.478535 -0.072083

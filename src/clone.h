@@ -12,6 +12,7 @@ private:
 	Matrix model_matrix;
 	Matrix translate_matrix;
 	Matrix rotate_matrix;
+	Matrix scale_matrix;
 public:
 	Clone(Model * model, Camera * clone);
 

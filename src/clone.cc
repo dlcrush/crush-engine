@@ -10,6 +10,7 @@ Clone::Clone(Model * model, Camera * camera) {
 	model_matrix = Matrix::identity();
 	translate_matrix = Matrix::identity();
 	rotate_matrix = Matrix::identity();
+	scale_matrix = Matrix::identity();
 }
 
 // constructor
@@ -35,12 +36,12 @@ void Clone::translate(float x, float y, float z) {
 // rotates clone
 // x, y, and z are the values to rotate in the respective directions.
 void Clone::rotate(float x, float y, float z) {
-	rotate_matrix = Matrix::identity() * Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
+	rotate_matrix = scale_matrix * Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
 	//model_matrix = model_matrix * Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
 }
 
 // scales clone
 // NOTE: Matrix::scale needs to be completed. Won't work as is.
 void Clone::scale(float x, float y, float z) {
-	model_matrix.scale(x,y,z);
+	scale_matrix = Matrix::scale(x,y,z);
 }

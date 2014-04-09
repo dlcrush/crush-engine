@@ -11,6 +11,9 @@ using namespace std;
 // Constructor
 Material::Material() {
 	// do nothing
+	hasTexture = false;
+	tex_height = 0.0f;
+	tex_width = 0.0f;
 }
 
 // Destructor
@@ -68,6 +71,30 @@ void Material::set_Ns(GLfloat coefficient){
 	Ns = coefficient;
 }
 
+void Material::set_has_texture(bool has_texture) {
+	hasTexture = has_texture;
+}
+
+void Material::set_texture(unsigned char * texture) {
+	this->texture = texture;
+}
+
+void Material::set_tex_height(GLfloat height) {
+	tex_height = height;
+}
+
+void Material::set_tex_width(GLfloat width) {
+	tex_width = width;
+}
+
+GLfloat Material::get_tex_height() {
+	return tex_height;
+}
+
+GLfloat Material::get_tex_width() {
+	return tex_width;
+}
+
 // returns the name of the material
 string Material::get_name(){
 	return name;
@@ -106,4 +133,15 @@ GLfloat * Material::get_Ks(){
 // returns the Ns property of the material
 GLfloat Material::get_Ns(){
 	return Ns;
+}
+
+bool Material::has_texture() {
+	return hasTexture;
+}
+
+// Returns the texture array of the material
+// NOTE: user is responsible for verifying that the
+// material has a texture before using texture array.
+unsigned char * Material::get_texture() {
+	return texture;
 }

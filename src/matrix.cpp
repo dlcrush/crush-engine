@@ -123,23 +123,26 @@ Matrix Matrix::perspective(float fovy, float aspect, float zNear, float zFar) {
 
 	Matrix returnMatrix;
 
-	returnMatrix.matrix[0][0] = f/aspect;
+	returnMatrix.matrix[0][0] = f/ (float) aspect;
 	returnMatrix.matrix[1][1] = f;
 	returnMatrix.matrix[2][2] = (zFar + zNear) / (zNear - zFar);
 	returnMatrix.matrix[2][3] = (2 * zFar * zNear) / (zNear - zFar);
-	returnMatrix.matrix[2][3] = -1;
+	returnMatrix.matrix[3][2] = -1;
 
 	return returnMatrix;
 }
 
 // scales the matrix
 // NOTE: Needs to be completed
-void Matrix::scale(float x, float y, float z) {
-	// for (int i = 0; i < 4; i ++) {
-	// 	matrix[i][0] *= x;
-	// 	matrix[i][1] *= y;
-	// 	matrix[i][2] *= z;
-	// }
+Matrix Matrix::scale(float x, float y, float z) {
+	Matrix scaleMatrix;
+
+	scaleMatrix.matrix[0][0] = x;
+	scaleMatrix.matrix[1][1] = y;
+	scaleMatrix.matrix[2][2] = z;
+	scaleMatrix.matrix[3][3] = 1;
+
+	return scaleMatrix;
 }
 
 // overrides the << operator

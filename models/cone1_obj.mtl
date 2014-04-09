@@ -12,4 +12,4 @@ newmtl cone1
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.1980 0.1980 0.1980
 	Ke 0.0000 0.0000 0.0000
-	map_Kd models/textures/cone1.jpg
+	map_Kd models/textures/cone1.ppm

@@ -1,6 +1,5 @@
 # 
 # 
-
 newmtl atmosphere
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
@@ -9,7 +8,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 1
-map_Kd Earth_Clouds_D.tga
+map_Kd models/textures/Earth_Clouds_D.ppm
 
 newmtl earth
 Ns 96.078431
@@ -19,4 +18,4 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 1
-map_Kd Earth_D.tga
+map_Kd models/textures/Earth_D.ppm

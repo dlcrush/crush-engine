@@ -40,16 +40,14 @@ private:
 	std::vector<GLuint> vertex_buffer_id, normal_buffer_id;
 	/* Holds number of vertices in the model */
 	int number_of_vertices;
-	std::vector<GLuint> vertex_id, normal_id;
+	GLuint vertex_id, normal_id;
 	std::vector<int> materialIDs;
 	std::vector<int> material_vertex_map;
 	std::vector<Material> materials;
 	std::vector<int> sizes;
 	GLuint texture_id;
 	GLuint tex_coord_id;
-	GLuint tex_coord_buffer_id;
-	int tex_width;
-	int tex_height;
+	std::vector<GLuint> tex_coord_buffer_id;
 	int texture_size;
 	GLuint ambient_id, diffuse_id, specular_id, specular_coefficient_id,
 		texture_sampler_id, model_view_projection_matrix_id, model_view_matrix_id,

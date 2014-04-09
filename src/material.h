@@ -19,6 +19,9 @@ private:
 	GLfloat Ks_r, Ks_g, Ks_b;
 	GLfloat Ns;
 	bool hasTexture;
+	unsigned char * texture;
+	GLfloat tex_height;
+	GLfloat tex_width;
 public:
 
 	// Constructor
@@ -49,6 +52,18 @@ public:
 	// NOTE: 0.0 <= coefficient <= 1.0
 	void set_Ns(GLfloat coefficient);
 
+	void set_texture(unsigned char * texture);
+
+	void set_has_texture(bool has_texture);
+
+	void set_tex_height(GLfloat height);
+
+	void set_tex_width(GLfloat width);
+
+	GLfloat get_tex_height();
+
+	GLfloat get_tex_width();
+
 	// returns the name of the material
 	string get_name();
 
@@ -63,6 +78,10 @@ public:
 
 	// returns the Ns property of the material
 	GLfloat get_Ns();
+
+	bool has_texture();
+
+	unsigned char * get_texture();
 
 };
 

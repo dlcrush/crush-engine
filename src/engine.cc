@@ -19,7 +19,7 @@
 #include "camera.h"
 #include <iostream>
 
-#define DELTA_ROT 0.05f
+#define DELTA_ROT 0.005f
 
 using namespace std;
 
@@ -35,7 +35,10 @@ int main(int argc, char * argv[]) {
   float delta_rot = DELTA_ROT;     // Ammount rotation changes on key press
   float x_rot2 = 0.0f;         // X rotation scaling factor
   float y_rot2 = 0.0f;         // Y rotation scaling factor
-  float delta_rot2 = DELTA_ROT; 
+  float x_rot3 = 0.0f;         // X rotation scaling factor
+  float y_rot3 = 0.0f;   
+  float delta_rot2 = DELTA_ROT;
+  float delat_rot3 = DELTA_ROT;
   string fileToLoad = argv[1];
 
   GLuint program_id;                  // shader program handle
@@ -57,39 +60,11 @@ int main(int argc, char * argv[]) {
   Camera camera; // camera object
   // clone objects
   Clone clone1(&model, &camera);
-  Clone clone2(&model, &camera);
-  Clone clone3(&model, &camera);
-  Clone clone4(&model, &camera);
-  Clone clone5(&model, &camera);
-  Clone clone6(&model, &camera);
-  Clone clone7(&model, &camera);
-  Clone clone8(&model, &camera);
-  Clone clone9(&model, &camera);
-  Clone clone10(&model, &camera);
-  Clone clone11(&model, &camera);
-  Clone clone12(&model, &camera);
-  Clone clone13(&model, &camera);
-  Clone clone14(&model, &camera);
-  Clone clone15(&model, &camera);
+
+  clone1.scale(0.50f,0.50f,0.50f);
 
   // translate clones
-  clone1.translate(-5.0f, 0.0f, -3.0f);
-  clone2.translate(0.0f, 0.0f, -3.0f);
-  clone3.translate(5.0f, 0.0f, -3.0f);
-  clone4.translate(5.0f, 5.0f, -3.0f);
-  clone5.translate(5.0f, -5.0f, -3.0f);
-  clone6.translate(0.0f, -5.0f, -3.0f);
-  clone7.translate(0.0f, 5.0f, -3.0f);
-  clone8.translate(-5.0f, 5.0f, -3.0f);
-  clone9.translate(-5.0f, -5.0f, -3.0f);
-  clone10.translate(-10.0f, -5.0f, -3.0f);
-  clone11.translate(-10.0f, 0.0f, -3.0f);
-  clone12.translate(-10.0f, 5.0f, -3.0f);
-  clone13.translate(10.0f, -5.0f, -3.0f);
-  clone14.translate(10.0f, 5.0f, -3.0f);
-  clone15.translate(10.0f, 0.0f, -3.0f);
-
-  //cout << projection_matrix << endl;
+  clone1.translate(0.0f, 0.0f, -1.0f);
 
   do {
       process_input(x_rot, y_rot, delta_rot, x_rot2, y_rot2, delta_rot2, light);
@@ -98,41 +73,14 @@ int main(int argc, char * argv[]) {
       // Get window size (may be different than the requested size)
       glfwGetWindowSize(&width, &height);
       ratio = width / (float) height;
-      Matrix projection_matrix = Matrix::ortho(-10.0 * ratio, 10.0 * ratio, -10.0f, 10.0f, -10.0f, 10.0f);
-      clone1.rotate(x_rot, y_rot, 0.0f);
-      clone2.rotate(x_rot, y_rot, 0.0f);
-      clone3.rotate(x_rot, y_rot, 0.0f);
-      clone4.rotate(x_rot, y_rot, 0.0f);
-      clone5.rotate(x_rot, y_rot, 0.0f);
-      clone6.rotate(x_rot, y_rot, 0.0f);
-      clone7.rotate(x_rot, y_rot, 0.0f);
-      clone8.rotate(x_rot, y_rot, 0.0f);
-      clone9.rotate(x_rot, y_rot, 0.0f);
-      clone10.rotate(x_rot, y_rot, 0.0f);
-      clone11.rotate(x_rot, y_rot, 0.0f);
-      clone12.rotate(x_rot, y_rot, 0.0f);
-      clone13.rotate(x_rot, y_rot, 0.0f);
-      clone14.rotate(x_rot, y_rot, 0.0f);
-      clone15.rotate(x_rot, y_rot, 0.0f);
+      //Matrix projection_matrix = Matrix::ortho(-10.0 * ratio, 10.0 * ratio, -10.0f, 10.0f, -10.0f, 10.0f);
+      Matrix projection_matrix = Matrix::perspective(27.0f, ratio, 0.01f, 10.0f);
+      clone1.rotate(0.0f, y_rot, 0.0f);
 
       // y_rot2 and x_rot2 are weird right now
-      camera.translate(-y_rot2, 0.0f, x_rot2);
+      camera.translate(y_rot2, -x_rot, x_rot2);
 
       clone1.draw(projection_matrix);
-      clone2.draw(projection_matrix);
-      clone3.draw(projection_matrix);
-      clone4.draw(projection_matrix);
-      clone5.draw(projection_matrix);
-      clone6.draw(projection_matrix);
-      clone7.draw(projection_matrix);
-      clone8.draw(projection_matrix);
-      clone9.draw(projection_matrix);
-      clone10.draw(projection_matrix);
-      clone11.draw(projection_matrix);
-      clone12.draw(projection_matrix);
-      clone13.draw(projection_matrix);
-      clone14.draw(projection_matrix);
-      clone15.draw(projection_matrix);
 
       glfwSwapBuffers();
     } // Check if the ESC key was pressed or the window was closed

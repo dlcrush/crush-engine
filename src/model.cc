@@ -57,11 +57,8 @@ void copyVectorToArray(vector<GLfloat> source, GLfloat * destination,
 void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, 
   int begin, int end) {
   for (int i = begin; i < end; i ++) {
-    //cout << "i: " << i << endl;
-    //cout << "i - begin : " << i - begin << endl;
     destination[i - begin] = source.at(i);
   }
-  //cout << endl;
 }
 
 // Splits string into two parts. First part is face value.
@@ -144,25 +141,22 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
       inputFile >> coefficient;
 
       material.set_Ns(coefficient);
-      //materials.push_back(material);
     }
     else if(type.compare("map_Kd") == 0) {
-      //cout << "map_Kd" << endl;
-
       string fileName;
 
       inputFile >> fileName;
 
-      //PPMReader reader(fileName);
-      PPMReader test(fileName);
+      PPMReader reader(fileName);
       int tex_size = 0;
       texture = new unsigned char[10];
-      test.read(texture, tex_size, tex_width, tex_height);
-      //cout << tex_size << endl;
-      //texture = test.read();
-      for (int i = 0; i < 10; i ++) {
-        //cout << (int) texture[i] << endl;
-      }
+      // GLfloat tex_width;
+      // GLfloat tex_height;
+      reader.read(texture, tex_size, tex_width, tex_height);
+      material.set_tex_width(tex_width);
+      material.set_tex_height(tex_height);
+      material.set_has_texture(true);
+      material.set_texture(texture);
     }
   }
 
@@ -173,8 +167,6 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
 
 Model::Model(GLuint program_id) {
   this->program_id = program_id;
-  tex_width = 0;
-  tex_height = 0;
   ambient_id = glGetUniformLocation(program_id, 
       "ambient_color_4f");
   diffuse_id = glGetUniformLocation(program_id, 
@@ -185,6 +177,9 @@ Model::Model(GLuint program_id) {
     "specular_coefficient_1f");
   texture_sampler_id = glGetUniformLocation(program_id, "textureSampler");
 
+  vertex_id = glGetAttribLocation(program_id, "vertex_3f");
+  normal_id = glGetAttribLocation(program_id, "normal_3f");
+  tex_coord_id = glGetAttribLocation(program_id, "tex_coord_2f");
 
   model_view_projection_matrix_id = glGetUniformLocation(program_id, "model_view_projection_matrix4f");
   model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
@@ -260,6 +255,8 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
 
       inputFile >> mtlFile;
 
+      int tex_width;
+      int tex_height;
       loadMtlFile(mtlFile, materials, texture, tex_width, tex_height);
     }
     else if (type.compare("usemtl") == 0) {
@@ -335,19 +332,6 @@ void Model::load(string objFileName) {
   readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
     textures, texture, materialIDs, material_vertex_map);
 
-  for (int i = 0; i < vt.size(); i ++) {
-    //cout << vt.at(i) << endl;
-  }
-
-  //cout << endl;
-
-  for (int i = 0; i < textures.size(); i ++) {
-    //cout << textures.at(i) << endl;
-    if ((i + 1) % 2 == 0) {
-      //cout << endl;
-    }
-  }
-
   if (success) {
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;
@@ -355,9 +339,15 @@ void Model::load(string objFileName) {
 
       GLfloat * verticeArray = new GLfloat[vertices.size()];
       GLfloat * normalArray = new GLfloat[normals.size()];
+      GLfloat * textureArray = new GLfloat[textures.size()];
 
       copyVectorToArray(vertices,verticeArray,material_vertex_map,i);
       copyVectorToArray(normals,normalArray,material_vertex_map,i);
+      //copyVectorToArray(textures,textureArray,material_vertex_map,i);
+
+      for (int i = 0; i < textures.size(); i ++) {
+        textureArray[i] = textures.at(i);
+      }
 
       int size = 0;
 
@@ -379,77 +369,32 @@ void Model::load(string objFileName) {
 
       sizes.push_back(size);
 
-      GLuint temp_vertex_buffer_id, temp_normal_buffer_id;
+      GLuint temp_vertex_buffer_id, temp_normal_buffer_id, temp_tex_coord_buffer_id;
       glGenBuffers(1, &temp_vertex_buffer_id);
       vertex_buffer_id.push_back(temp_vertex_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
-      if ((i + 1) < material_vertex_map.size()) {
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+      glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
           verticeArray, GL_STATIC_DRAW);
-      }
-      else {
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
-          verticeArray, GL_STATIC_DRAW);
-      }
 
       glGenBuffers(1, &temp_normal_buffer_id);
       normal_buffer_id.push_back(temp_normal_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
-      if ((i + 1) < material_vertex_map.size()) {
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
+      glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
           normalArray, GL_STATIC_DRAW);
-      }
-      else {
-        glBufferData(GL_ARRAY_BUFFER, size * BYTES_PER_FLOAT, 
-          normalArray, GL_STATIC_DRAW);
-      }
 
-      // Set shader attribute variables
-      vertex_id.push_back(glGetAttribLocation(program_id, 
-        "vertex_3f"));
-      normal_id.push_back(glGetAttribLocation(program_id, 
-        "normal_3f"));
+      int texture_size = textures.size();
+      cout << texture_size << endl;
 
+      glGenBuffers(1, &temp_tex_coord_buffer_id);
+      tex_coord_buffer_id.push_back(temp_tex_coord_buffer_id);
+      glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id.at(i));
+      glBufferData(GL_ARRAY_BUFFER, texture_size * BYTES_PER_FLOAT, textureArray, GL_STATIC_DRAW);
+      
       delete[] verticeArray;
       delete[] normalArray;
+      delete[] textureArray;
     }
-
-    tex_coord_id = glGetAttribLocation(program_id, "tex_coord_2f");
-
-    int count = 0;
-    for (int i = 0; i < textures.size() - 1; i += 2) {
-      count ++;
-      cout << textures.at(i) << " " << textures.at(i + 1) << endl;
-      if (count % 3 == 0) {
-        cout << endl;
-      }
-    }
-
-    GLfloat * textureArray = new GLfloat[textures.size()];
-    copy(textures.begin(), textures.end(), textureArray);
-    texture_size = textures.size();
-    cout << texture_size << endl;
-
-    // for (int i = 0; i < textures.size() - 1; i += 2) {
-    //   count ++;
-    //   cout << textureArray.at(i) << " " << textures.at(i + 1) << endl;
-    //   if (count % 3 == 0) {
-    //     cout << endl;
-    //   }
-    // }
-
-    glGenBuffers(1, &tex_coord_buffer_id);
-    glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-    glBufferData(GL_ARRAY_BUFFER, texture_size * 4, textureArray, GL_STATIC_DRAW);
-
-    for (int i = 0; i < 196605; i ++) {
-      //cout << texture[i] << endl;
-    }
-    cout << tex_width << endl;
-    cout << tex_height << endl;
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
   }
 }
 
@@ -459,17 +404,11 @@ void Model::load(string objFileName) {
 // POST: The model has been drawn to the screen. 
 void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matrix) {
   
-  //glActiveTexture(GL_TEXTURE0);
-  //glBindTexture(GL_TEXTURE_2D, texture_id);
-
+  glEnableVertexAttribArray(vertex_id);
+  glEnableVertexAttribArray(normal_id);
   glEnableVertexAttribArray(tex_coord_id);
-  glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id);
-  glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
-    0, NULL);
 
-  //cout << vertex_id.size() << endl;
-
-  for (int i = 0; i < vertex_id.size(); i ++) {
+  for (int i = 0; i < materialIDs.size(); i ++) {
     int current_material_id = materialIDs.at(i);
 
     Material * material = &(materials.at(current_material_id));
@@ -478,6 +417,24 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
     GLfloat * Kd = material->get_Kd();
     GLfloat * Ks = material->get_Ks();
     GLfloat Ns = material->get_Ns();
+    bool has_texture = material->has_texture();
+    if (has_texture) {
+      unsigned char * texture = material->get_texture();
+
+      GLfloat tex_width = material->get_tex_width();
+      GLfloat tex_height = material->get_tex_height();
+
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, texture_id);      
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+      glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id.at(i));
+      glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
+        0, NULL);
+    }
 
     glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
     glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
@@ -493,23 +450,21 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
     glUniformMatrix4fv(model_view_matrix_id, 1, GL_TRUE, model_view_matrix.data());
     glUniformMatrix4fv(normal_matrix_id, 1, GL_TRUE, normal_matrix.data());
 
-    glEnableVertexAttribArray(vertex_id.at(i));
+    
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id.at(i));
-    glVertexAttribPointer(vertex_id.at(i), 3, GL_FLOAT, GL_FALSE, 
+    glVertexAttribPointer(vertex_id, 3, GL_FLOAT, GL_FALSE, 
       0, NULL);
 
-    glEnableVertexAttribArray(normal_id.at(i));
+    
     glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_id.at(i));
-    glVertexAttribPointer(normal_id.at(i), 3, GL_FLOAT, GL_FALSE, 
+    glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 
       0, NULL);
 
     glDrawArrays(GL_TRIANGLES, 0, sizes.at(i));
-
-    glDisableVertexAttribArray(vertex_id.at(i));
-    glDisableVertexAttribArray(normal_id.at(i));
-    
   }
 
+  glDisableVertexAttribArray(vertex_id);
+  glDisableVertexAttribArray(normal_id);
   glDisableVertexAttribArray(tex_coord_id);
 }
 
@@ -518,6 +473,7 @@ void Model::clear() {
   for (int i = 0; i < vertex_buffer_id.size(); i ++) {
     glDeleteBuffers(1, &vertex_buffer_id.at(i));
     glDeleteBuffers(1, &normal_buffer_id.at(i));
+    glDeleteBuffers(1, &tex_coord_buffer_id.at(i));
   }
 
   if (vertex_buffer_id.size() > 0) {
@@ -526,5 +482,9 @@ void Model::clear() {
 
   if (normal_buffer_id.size() > 0) {
     normal_buffer_id.erase(normal_buffer_id.begin());
+  }
+
+  if (tex_coord_buffer_id.size() > 0) {
+    tex_coord_buffer_id.erase(tex_coord_buffer_id.begin());
   }
 }
