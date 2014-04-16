@@ -22,7 +22,7 @@ Clone::~Clone() {
 // Draws clone
 // projection_matrix is the 4x4 projection matrix for the window.
 void Clone::draw(Matrix projection_matrix) {
-	model_matrix = translate_matrix * rotate_matrix;
+	model_matrix = translate_matrix * rotate_matrix * scale_matrix;
 	model->draw(projection_matrix, camera->getViewMatrix(), model_matrix);
 }
 
@@ -36,7 +36,7 @@ void Clone::translate(float x, float y, float z) {
 // rotates clone
 // x, y, and z are the values to rotate in the respective directions.
 void Clone::rotate(float x, float y, float z) {
-	rotate_matrix = scale_matrix * Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
+	rotate_matrix = Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
 	//model_matrix = model_matrix * Matrix::rotateX(x) * Matrix::rotateY(y) * Matrix::rotateZ(z);
 }
 

@@ -69,14 +69,12 @@ void split(string input, string & face, string & normal, string & texture) {
     face = input;
   }
   else {
-    //string texture = "";
     string subString = input.substr(index + 1, string::npos);
     int index2 = subString.find("/");
     face = input.substr(0, index);
     string test = input.substr(index + 1, string::npos);
     int index3 = subString.find("/");
     texture = test.substr(0, index3);
-    //cout << "texture: " << texture << endl;
     normal = subString.substr(index2 + 1, string::npos);
   }
 }
@@ -287,10 +285,6 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       split(input2, face2, normal2, texture2);
       split(input3, face3, normal3, texture3);
 
-      //cout << "texture1 = " << texture1 << endl;
-      //cout << "texture2 = " << texture2 << endl;
-      //cout << "texture3 = " << texture3 << endl;
-
       addFaceVertex(vertices, points, normals, vn,
         textures, vt,
         atoi(face1.c_str()), atof(normal1.c_str()),
@@ -332,7 +326,10 @@ void Model::load(string objFileName) {
   readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
     textures, texture, materialIDs, material_vertex_map);
 
+  cout << "readOBJ done" << endl;
+
   if (success) {
+    cout << "success" << endl;
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;
     for (int i = 0; i < material_vertex_map.size(); i ++) {
@@ -343,11 +340,11 @@ void Model::load(string objFileName) {
 
       copyVectorToArray(vertices,verticeArray,material_vertex_map,i);
       copyVectorToArray(normals,normalArray,material_vertex_map,i);
-      //copyVectorToArray(textures,textureArray,material_vertex_map,i);
+      copyVectorToArray(textures,textureArray,material_vertex_map,i);
 
-      for (int i = 0; i < textures.size(); i ++) {
-        textureArray[i] = textures.at(i);
-      }
+      // for (int i = 0; i < textures.size(); i ++) {
+      //   textureArray[i] = textures.at(i);
+      // }
 
       int size = 0;
 
