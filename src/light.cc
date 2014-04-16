@@ -22,9 +22,9 @@ Light::Light(GLuint program_id) {
 	if (! Light::instantiated) {
 		Light::instantiated = false;
 		Light::program_id = program_id;
-		Light::light_id = glGetUniformLocation(Light::program_id, "light_position");
-		Light::light_color_id = glGetUniformLocation(Light::program_id, "light_color");
-		Light::attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_amount");
+		Light::light_id = glGetUniformLocation(Light::program_id, "light_position_3f");
+		Light::light_color_id = glGetUniformLocation(Light::program_id, "light_color_4f");
+		Light::attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_factor_1f");
 	}
 
 	light_x = 1.0f;
@@ -64,9 +64,9 @@ void Light::set_attenuation(GLfloat factor){
 // If a light is already activated, this call replaces the current
 // active light.
 void Light::activate() {
-	light_id = glGetUniformLocation(Light::program_id, "light_position");
-	light_color_id = glGetUniformLocation(Light::program_id, "light_color");
-	attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_amount");
+	//light_id = glGetUniformLocation(Light::program_id, "light_position");
+	//light_color_id = glGetUniformLocation(Light::program_id, "light_color");
+	//attenuation_amount_id = glGetUniformLocation(Light::program_id, "attenuation_amount");
   	glUniform3f(Light::light_id, light_x, light_y, light_z);
 	glUniform4f(Light::light_color_id, light_r, light_g, light_b, 1.0f);
 	glUniform1f(Light::attenuation_amount_id, attenuation);

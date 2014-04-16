@@ -1,7 +1,16 @@
+David Crush
+Game Engine
+
+Note: There's still something weird going on with my textures.
+Some textured files load fine. Others load weird.
+
 To compile, run the following command:
 
 $: make
 
 To run the compiled program, use the following command:
 
-$: ./shader <name of obj file>
+$: ./engine
+
+This will run a program that draws 4 textured crates. You may move around
+the world. There is no collision detection.
