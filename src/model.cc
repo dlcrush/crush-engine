@@ -1,5 +1,5 @@
-#include "model.h"
-#include "material.h"
+#include "headers/model.h"
+#include "headers/material.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glew.h>
@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include "PPMReader.h"
+#include "headers/PPMReader.h"
 using namespace std;
 
 #define BYTES_PER_FLOAT 4

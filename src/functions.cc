@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GL/glfw.h>
-#include "model.h"
-#include "light.h"
-#include "functions.h"
+#include "headers/model.h"
+#include "headers/light.h"
+#include "headers/functions.h"
 #include <iostream>
 
 using namespace std;

@@ -1,4 +1,4 @@
-#include "PPMReader.h"
+#include "headers/PPMReader.h"
 #include <iostream>
 #include <fstream>
 #include <string>

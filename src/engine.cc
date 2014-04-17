@@ -10,13 +10,13 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GL/glfw.h>
-#include "model.h"
-#include "light.h"
-#include "window.h"
-#include "functions.h"
-#include "matrix.h"
-#include "clone.h"
-#include "camera.h"
+#include "headers/model.h"
+#include "headers/light.h"
+#include "headers/window.h"
+#include "headers/functions.h"
+#include "headers/matrix.h"
+#include "headers/clone.h"
+#include "headers/camera.h"
 #include <iostream>
 
 #define DELTA_ROT 0.01f

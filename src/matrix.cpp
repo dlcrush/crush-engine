@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "headers/matrix.h"
 #include <cmath>
 #include <iostream>
 #include <GL/glew.h>

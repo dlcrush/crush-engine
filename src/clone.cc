@@ -1,7 +1,7 @@
-#include "clone.h"
-#include "matrix.h"
+#include "headers/clone.h"
+#include "headers/matrix.h"
 #include <vector>
-#include "vector.h"
+#include "headers/vector.h"
 
 // constructor
 // model and camera pointers should point to two previously

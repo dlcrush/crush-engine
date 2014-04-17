@@ -1,5 +1,5 @@
-#include "camera.h"
-#include "matrix.h"
+#include "headers/camera.h"
+#include "headers/matrix.h"
 
 // constructor
 Camera::Camera() {
