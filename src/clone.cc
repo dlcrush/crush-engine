@@ -1,5 +1,7 @@
 #include "clone.h"
 #include "matrix.h"
+#include <vector>
+#include "vector.h"
 
 // constructor
 // model and camera pointers should point to two previously
@@ -11,12 +13,27 @@ Clone::Clone(Model * model, Camera * camera) {
 	translate_matrix = Matrix::identity();
 	rotate_matrix = Matrix::identity();
 	scale_matrix = Matrix::identity();
+	GLfloat minx, miny, minz;
+	GLfloat maxx, maxy, maxz;
+	minx = model->get_min_x();
+	miny = model->get_min_y();
+	minz = model->get_min_z();
+	maxx = model->get_max_x();
+	maxy = model->get_max_y();
+	maxz = model->get_max_z();
+	cout << minx << endl;
+	cout << miny << endl;
+	cout << minz << endl;
+	cout << maxx << endl;
+	cout << maxy << endl;
+	cout << maxz << endl;
 }
 
 // constructor
 // Doesn't have a purpose right now.
 Clone::~Clone() {
 	// there is nothing to do
+	
 }
 
 // Draws clone
@@ -41,7 +58,6 @@ void Clone::rotate(float x, float y, float z) {
 }
 
 // scales clone
-// NOTE: Matrix::scale needs to be completed. Won't work as is.
 void Clone::scale(float x, float y, float z) {
 	scale_matrix = Matrix::scale(x,y,z);
 }

@@ -20,6 +20,8 @@ clone.o: src/clone.cc src/clone.h src/matrix.h src/camera.h
 	g++ -c src/clone.cc -framework OpenGL -lglfw -lGLEW
 camera.o: src/camera.cc src/camera.h src/matrix.h
 	g++ -c src/camera.cc -framework OpenGL -lglfw -lGLEW
+vector.o: src/vector.cpp src/vector.h
+	g++ -c src/vector.cc -framework OpenGL -lglfw -lGLEW
 clean:
 	rm *.o
 	rm engine

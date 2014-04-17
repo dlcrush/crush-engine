@@ -4,6 +4,8 @@
 #include "matrix.h"
 #include "model.h"
 #include "camera.h"
+#include <vector>
+#include "vector.h"
 
 class Clone {
 private:
@@ -13,6 +15,7 @@ private:
 	Matrix translate_matrix;
 	Matrix rotate_matrix;
 	Matrix scale_matrix;
+	std::vector<Vector> bounding_box_normals;
 public:
 	Clone(Model * model, Camera * clone);
 

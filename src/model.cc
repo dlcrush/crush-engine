@@ -14,6 +14,22 @@ using namespace std;
 #define BYTES_PER_FLOAT 4
 #define FLOATS_PER_VERTEX 3
 
+// Updates the current minimum value if the current value
+// is less than the current minimum value.
+void updateMin(GLfloat & currMin, const GLfloat curr) {
+  if (curr < currMin) {
+    currMin = curr;
+  }
+}
+
+// Updates the current maximum value if the current value
+// is greater than the current maximum value.
+void updateMax(GLfloat & currMax, const GLfloat curr) {
+  if (curr > currMax) {
+    currMax = curr;
+  }
+}
+
 // Copies values in source vector to destination array
 // NOTE: destination needs to be allocated space before function call
 // NOTE: i should be a positive integer (or 0) and i < mapping.size()
@@ -78,6 +94,30 @@ void split(string input, string & face, string & normal, string & texture) {
     normal = subString.substr(index2 + 1, string::npos);
   }
 }
+
+  GLfloat Model::get_min_x() {
+    return minx;
+  }
+
+  GLfloat Model::get_min_y() {
+    return miny;
+  }
+
+  GLfloat Model::get_min_z() {
+    return minz;
+  }
+
+  GLfloat Model::get_max_x() {
+    return maxx;
+  }
+
+  GLfloat Model::get_max_y() {
+    return maxy;
+  }
+
+  GLfloat Model::get_max_z() {
+    return maxz;
+  }
 
 // loads Material file
 // PRE: mtlFile is defined, materials has been allocated space
@@ -182,6 +222,13 @@ Model::Model(GLuint program_id) {
   model_view_projection_matrix_id = glGetUniformLocation(program_id, "model_view_projection_matrix4f");
   model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
   normal_matrix_id = glGetUniformLocation(program_id, "normal_matrix4f");
+
+  minx = 0.0f;
+  miny = 0.0f;
+  minz = 0.0f;
+  maxx = 0.0f;
+  maxy = 0.0f;
+  maxz = 0.0f;
 }
 
 // PRE:
@@ -391,7 +438,28 @@ void Model::load(string objFileName) {
       delete[] normalArray;
       delete[] textureArray;
     }
+
+    for (int i = 0; i < vertices.size() - 3; i += 3) {
+      GLfloat currx = vertices.at(i);
+      GLfloat curry = vertices.at(i + 1);
+      GLfloat currz = vertices.at(i + 2);
+
+      updateMin(minx, currx);
+      updateMin(miny, curry);
+      updateMin(minz, currz);
+      updateMax(maxx, currx);
+      updateMax(maxy, curry);
+      updateMax(maxz, currz);
+    }
     
+    cout << "minx: " << minx << endl;
+    cout << "maxx: " << maxx << endl;
+
+    cout << "miny: " << miny << endl;
+    cout << "maxy: " << maxy << endl;
+
+    cout << "minz: " << minz << endl;
+    cout << "maxz: " << maxz << endl;
   }
 }
 

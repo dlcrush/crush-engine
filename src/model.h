@@ -10,6 +10,10 @@
 #include "material.h"
 #include "matrix.h"
 
+void updateMin(GLfloat & currMin, const GLfloat curr);
+
+void updateMax(GLfloat & currMax, const GLfloat curr);
+
 // Copies values in source vector to destination array
 // NOTE: destination needs to be allocated space before function call
 // NOTE: i should be a positive integer (or 0) and i < mapping.size()
@@ -53,6 +57,8 @@ private:
 		texture_sampler_id, model_view_projection_matrix_id, model_view_matrix_id,
 		normal_matrix_id;
 	GLuint program_id;
+	GLfloat minx, miny, minz;
+	GLfloat maxx, maxy, maxz;
 
 public:
 	
@@ -63,6 +69,13 @@ public:
 	// PRE:
 	// POST: All glBuffers have been deleted.
 	~Model();
+
+	GLfloat get_min_x();
+	GLfloat get_min_y();
+	GLfloat get_min_z();
+	GLfloat get_max_x();
+	GLfloat get_max_y();
+	GLfloat get_max_z();
 
 	void readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
   vector<GLfloat> &vn, vector<GLfloat> &vt, vector<GLfloat> &vertices, 
