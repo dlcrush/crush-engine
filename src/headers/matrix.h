@@ -12,10 +12,11 @@ using namespace std;
 float cot(float i);
 
 class Matrix {
-private:
-	float matrix[NUM_ROWS][NUM_COLS];	
+private:	
 
 public:
+
+	float matrix[NUM_ROWS][NUM_COLS];
 
 	Matrix();
 

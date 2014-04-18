@@ -15,7 +15,7 @@ private:
 	Matrix translate_matrix;
 	Matrix rotate_matrix;
 	Matrix scale_matrix;
-	std::vector<Vector> bounding_box_normals;
+	vector<Vector> vertices;
 public:
 	Clone(Model * model, Camera * clone);
 

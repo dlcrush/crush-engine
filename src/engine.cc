@@ -19,7 +19,7 @@
 #include "headers/camera.h"
 #include <iostream>
 
-#define DELTA_ROT 0.01f
+#define DELTA_ROT 0.05f
 
 using namespace std;
 
@@ -50,31 +50,47 @@ int main(int argc, char * argv[]) {
 
   window.set_up_shaders("shaders/shader.vert", "shaders/shader.frag", program_id);
 
-  Model model(program_id);
-  model.load(fileToLoad);
+  /* create models */
+  Model crate(program_id);
+  Model spaceship(program_id);
+
+  /* Load models */
+  spaceship.load("models/SpaceShip.obj");
+
+  //return 0;
+  //crate.load(fileToLoad);
+
+
+  /* Create, set up, and activate light */
   Light light(program_id);
   light.set_position(0.0f, 0.0f, 10.0f);
   light.set_color(1.0f, 1.0f, 1.0f);
   light.set_attenuation(0.0f);
   light.activate();
 
-  Camera camera; // camera object
-  // clone objects
-  Clone clone1(&model, &camera);
-  Clone clone2(&model, &camera);
-  Clone clone3(&model, &camera);
-  Clone clone4(&model, &camera);
+  /* Create camera */
+  Camera camera;
 
-  clone1.scale(0.3f,0.3f,0.3f);
-  clone2.scale(0.5f,0.5f,0.5f);
-  clone3.scale(0.75f,0.75f,0.75f);
-  clone4.scale(0.1f,0.1f,0.1f);
+  /* Create clone objects */
+  // Clone crate1(&crate, &camera);
+  // Clone crate2(&crate, &camera);
+  // Clone crate3(&crate, &camera);
+  // Clone crate4(&crate, &camera);
+  Clone player(&spaceship, &camera);
 
-  // translate clones
-  clone1.translate(0.0f, 0.0f, -1.0f);
-  clone2.translate(5.0f, 0.0f, -1.0f);
-  clone3.translate(-5.0f, 0.0f, -1.0f);
-  clone4.translate(0.0f, 5.0f, -1.0f);
+  /* Scale clones */
+  // crate1.scale(0.3f,0.3f,0.3f);
+  // crate2.scale(0.5f,0.5f,0.5f);
+  // crate3.scale(0.75f,0.75f,0.75f);
+  // crate4.scale(0.1f,0.1f,0.1f);
+  player.scale(1.0f, 1.0f, 1.0f);
+
+  /* Translate clones */
+  // crate1.translate(0.0f, 0.0f, -2.0f);
+  // crate2.translate(5.0f, 0.0f, -2.0f);
+  // crate3.translate(-5.0f, 0.0f, -2.0f);
+  // crate4.translate(0.0f, 5.0f, -2.0f);
+  player.scale(0.0f, 0.0f, -1.0f);
 
   do {
       process_input(x_rot, y_rot, delta_rot, x_rot2, y_rot2, delta_rot2, light);
@@ -88,10 +104,11 @@ int main(int argc, char * argv[]) {
       // y_rot2 and x_rot2 are weird right now
       camera.translate(y_rot2, -x_rot, x_rot2);
       camera.rotate(0.0f, y_rot, 0.0f);
-      clone1.draw(projection_matrix);
-      clone2.draw(projection_matrix);
-      clone3.draw(projection_matrix);
-      clone4.draw(projection_matrix);
+      // crate1.draw(projection_matrix);
+      // crate2.draw(projection_matrix);
+      // crate3.draw(projection_matrix);
+      // crate4.draw(projection_matrix);
+      player.draw(projection_matrix);
 
       glfwSwapBuffers();
     } // Check if the ESC key was pressed or the window was closed

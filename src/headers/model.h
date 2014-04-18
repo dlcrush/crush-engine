@@ -59,6 +59,7 @@ private:
 	GLuint program_id;
 	GLfloat minx, miny, minz;
 	GLfloat maxx, maxy, maxz;
+	GLuint is_textured_id, is_shaded_id;
 
 public:
 	

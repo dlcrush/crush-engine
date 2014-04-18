@@ -223,6 +223,9 @@ Model::Model(GLuint program_id) {
   model_view_matrix_id = glGetUniformLocation(program_id, "model_view_matrix4f");
   normal_matrix_id = glGetUniformLocation(program_id, "normal_matrix4f");
 
+  is_textured_id = glGetUniformLocation(program_id, "is_textured_b");
+  is_shaded_id = glGetUniformLocation(program_id, "is_shaded_b");
+
   minx = 0.0f;
   miny = 0.0f;
   minz = 0.0f;
@@ -251,11 +254,15 @@ void Model::addFaceVertex(vector<GLfloat> & vertices,
   vertices.push_back(points.at((face - 1) * 3));
   vertices.push_back(points.at((face - 1) * 3 + 1));
   vertices.push_back(points.at((face - 1) * 3 + 2));
-  normals.push_back(vn.at((normal - 1) * 3));
-  normals.push_back(vn.at((normal - 1) * 3 + 1));
-  normals.push_back(vn.at((normal - 1) * 3 + 2));
-  textures.push_back(vt.at((texture - 1) * 2));
-  textures.push_back(vt.at((texture - 1) * 2 + 1));
+  if (vn.size() > 0) {
+    normals.push_back(vn.at((normal - 1) * 3));
+    normals.push_back(vn.at((normal - 1) * 3 + 1));
+    normals.push_back(vn.at((normal - 1) * 3 + 2));
+  }
+  if (vt.size() > 0) {
+    textures.push_back(vt.at((texture - 1) * 2));
+    textures.push_back(vt.at((texture - 1) * 2 + 1));
+  }
 }
 
 void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points, 
@@ -332,6 +339,8 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       split(input2, face2, normal2, texture2);
       split(input3, face3, normal3, texture3);
 
+      cout << "before add face vertices" << endl;
+
       addFaceVertex(vertices, points, normals, vn,
         textures, vt,
         atoi(face1.c_str()), atof(normal1.c_str()),
@@ -344,6 +353,8 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
         textures, vt,
         atoi(face3.c_str()), atof(normal3.c_str()),
         atof(texture3.c_str()));
+
+      cout << "after add face vertices" << endl;
     }
   }
 }
@@ -370,28 +381,51 @@ void Model::load(string objFileName) {
 
   int count = 0;
 
+  cout << "before readOBJ file " << endl;
+
   readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
     textures, texture, materialIDs, material_vertex_map);
 
   cout << "readOBJ done" << endl;
 
+  bool is_textured = false;
+  bool is_shaded = false;
+
+  if (vt.size() > 0) {
+    is_textured = true;
+    glUniform1i(is_textured_id, 1);
+  }
+  else {
+    glUniform1i(is_textured_id, 0);
+  }
+  if (vn.size() > 0) {
+    is_shaded = true;
+    glUniform1i(is_shaded_id, 1);
+  }
+  else {
+    glUniform1i(is_shaded_id, 0);
+  }
+
   if (success) {
     cout << "success" << endl;
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;
+    cout << "material_vertex_map.size() = " << material_vertex_map.size() << endl;
     for (int i = 0; i < material_vertex_map.size(); i ++) {
+
+      cout << "inside main loop" << endl;
 
       GLfloat * verticeArray = new GLfloat[vertices.size()];
       GLfloat * normalArray = new GLfloat[normals.size()];
       GLfloat * textureArray = new GLfloat[textures.size()];
 
+      cout << "after array creation" << endl;
+
       copyVectorToArray(vertices,verticeArray,material_vertex_map,i);
       copyVectorToArray(normals,normalArray,material_vertex_map,i);
       copyVectorToArray(textures,textureArray,material_vertex_map,i);
 
-      // for (int i = 0; i < textures.size(); i ++) {
-      //   textureArray[i] = textures.at(i);
-      // }
+      cout << "after array copy" << endl;
 
       int size = 0;
 
@@ -434,12 +468,21 @@ void Model::load(string objFileName) {
       glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id.at(i));
       glBufferData(GL_ARRAY_BUFFER, texture_size * BYTES_PER_FLOAT, textureArray, GL_STATIC_DRAW);
       
+      cout << "after genbuffers" << endl;
+
       delete[] verticeArray;
       delete[] normalArray;
       delete[] textureArray;
+
+      cout << "after delete" << endl;
     }
 
+    cout << "size: " << vertices.size() << endl;
+
+    cout << "vertices.size() - 3 = " << vertices.size() - 3 << endl;
+
     for (int i = 0; i < vertices.size() - 3; i += 3) {
+      cout << "in for loop" << endl;
       GLfloat currx = vertices.at(i);
       GLfloat curry = vertices.at(i + 1);
       GLfloat currz = vertices.at(i + 2);

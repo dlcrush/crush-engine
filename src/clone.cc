@@ -21,12 +21,34 @@ Clone::Clone(Model * model, Camera * camera) {
 	maxx = model->get_max_x();
 	maxy = model->get_max_y();
 	maxz = model->get_max_z();
-	cout << minx << endl;
-	cout << miny << endl;
-	cout << minz << endl;
-	cout << maxx << endl;
-	cout << maxy << endl;
-	cout << maxz << endl;
+	Vector * temp_vector;
+	temp_vector = new Vector(minx, miny, minz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(minx, miny, maxz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(minx, maxy, maxz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, maxy, maxz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, maxy, minz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, miny, minz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, miny, maxz);
+	vertices.push_back(*temp_vector);
+	temp_vector = new Vector(minx, maxy, minz);
+	vertices.push_back(*temp_vector);
+
+	// for (int i = 0; i < 8; i ++) {
+	// 	cout << vertices.at(i) << endl;
+	// }
+	// cout << endl;
+
+	Vector vector1(2.0f, 8.0f, 4.0f);
+	float data[4][4] = {{1.000,2.000, 3.000, 4.000}, {4.000,3.000, 2.000, 1.000}, {3.000, 2.000, 4.000, 1.000}, {2.000, 4.000, 1.000, 3.000}};
+	Matrix matrix1(data);
+	cout << vector1 * matrix1 << endl;
+
 }
 
 // constructor
@@ -40,6 +62,7 @@ Clone::~Clone() {
 // projection_matrix is the 4x4 projection matrix for the window.
 void Clone::draw(Matrix projection_matrix) {
 	model_matrix = translate_matrix * rotate_matrix * scale_matrix;
+	//cout << model_matrix << endl;
 	model->draw(projection_matrix, camera->getViewMatrix(), model_matrix);
 }
 
