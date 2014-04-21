@@ -8,7 +8,7 @@ Vector::Vector() {
 	data[0] = 0;
 	data[1] = 0;
 	data[2] = 0;
-	data[3] = 0;
+	data[3] = 1;
 }
 
 Vector::Vector(float * data) {
@@ -22,7 +22,7 @@ Vector::Vector(float x, float y, float z) {
 	this->data[0] = x;
 	this->data[1] = y;
 	this->data[2] = z;
-	this->data[3] = 0;
+	this->data[3] = 1;
 }
 
 void Vector::setData(float * data) {
@@ -62,10 +62,10 @@ ostream& operator<<(ostream& out, const Vector& temp){
 // It is assumed that Matrix is a 4x4 matrix
 Vector operator* (const Vector& v, const Matrix& m) {
 	Vector result;
-	result.data[0] = m.matrix[0][0] * v.data[0] + m.matrix[0][1] * v.data[1] + m.matrix[0][2] * v.data[2];
-	result.data[1] = m.matrix[1][0] * v.data[0] + m.matrix[1][1] * v.data[1] + m.matrix[1][2] * v.data[2];
-	result.data[2] = m.matrix[2][0] * v.data[0] + m.matrix[2][1] * v.data[1] + m.matrix[2][2] * v.data[2];
-	result.data[3] = m.matrix[3][0] * v.data[0] + m.matrix[3][1] * v.data[1] + m.matrix[3][2] * v.data[2];
+	result.data[0] = m.matrix[0][0] * v.data[0] + m.matrix[0][1] * v.data[1] + m.matrix[0][2] * v.data[2] + m.matrix[0][3] * v.data[3];
+	result.data[1] = m.matrix[1][0] * v.data[0] + m.matrix[1][1] * v.data[1] + m.matrix[1][2] * v.data[2] + m.matrix[1][3] * v.data[3];
+	result.data[2] = m.matrix[2][0] * v.data[0] + m.matrix[2][1] * v.data[1] + m.matrix[2][2] * v.data[2] + m.matrix[2][3] * v.data[3];
+	result.data[3] = m.matrix[3][0] * v.data[0] + m.matrix[3][1] * v.data[1] + m.matrix[3][2] * v.data[2] + m.matrix[3][3] * v.data[3];
 	return result;
 }
 

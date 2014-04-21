@@ -14,6 +14,7 @@ Material::Material() {
 	hasTexture = false;
 	tex_height = 0.0f;
 	tex_width = 0.0f;
+	transparency = 1.0f;
 }
 
 // Destructor
@@ -34,6 +35,12 @@ void Material::clear() {
 	Ks_g = 0.0f;
 	Ks_b = 0.0f;
 	Ns = 0.0f;
+	transparency = 1.0f;
+}
+
+// updates the material transparency
+void Material::set_transparency(GLfloat transparency) {
+	this->transparency = transparency;
 }
 
 // updates the name of the material
@@ -93,6 +100,10 @@ GLfloat Material::get_tex_height() {
 
 GLfloat Material::get_tex_width() {
 	return tex_width;
+}
+
+GLfloat Material::get_transparency() {
+	return transparency;
 }
 
 // returns the name of the material

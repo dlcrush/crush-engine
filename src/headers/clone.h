@@ -15,11 +15,13 @@ private:
 	Matrix translate_matrix;
 	Matrix rotate_matrix;
 	Matrix scale_matrix;
-	vector<Vector> vertices;
+	vector<Vector> vectors;
 public:
 	Clone(Model * model, Camera * clone);
 
 	~Clone();
+
+	vector<Vector> getVectors();
 
 	void draw(Matrix projection_matrix);
 

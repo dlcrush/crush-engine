@@ -55,7 +55,7 @@ private:
 	int texture_size;
 	GLuint ambient_id, diffuse_id, specular_id, specular_coefficient_id,
 		texture_sampler_id, model_view_projection_matrix_id, model_view_matrix_id,
-		normal_matrix_id;
+		normal_matrix_id, transparency_id;
 	GLuint program_id;
 	GLfloat minx, miny, minz;
 	GLfloat maxx, maxy, maxz;

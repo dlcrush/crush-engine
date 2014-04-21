@@ -35,6 +35,10 @@ void updateMax(GLfloat & currMax, const GLfloat curr) {
 // NOTE: i should be a positive integer (or 0) and i < mapping.size()
 void copyVectorToArray(vector<GLfloat> source, GLfloat * destination, 
   vector<int> mapping, int i) {
+  if (source.size() == 0) {
+    return;
+  }
+
   if ((i + 1) < mapping.size()) {
       // We aren't at the last element in the source.
       if (i == 0) {
@@ -180,6 +184,13 @@ void loadMtlFile(string mtlFile, vector<Material> & materials,
 
       material.set_Ns(coefficient);
     }
+    else if(type.compare("d") == 0 or type.compare("Tr") == 0) {
+      GLfloat transparency;
+
+      inputFile >> transparency;
+
+      material.set_transparency(transparency);
+    }
     else if(type.compare("map_Kd") == 0) {
       string fileName;
 
@@ -225,6 +236,8 @@ Model::Model(GLuint program_id) {
 
   is_textured_id = glGetUniformLocation(program_id, "is_textured_b");
   is_shaded_id = glGetUniformLocation(program_id, "is_shaded_b");
+
+  transparency_id = glGetUniformLocation(program_id, "transparency_coefficient_1f");
 
   minx = 0.0f;
   miny = 0.0f;
@@ -339,8 +352,6 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       split(input2, face2, normal2, texture2);
       split(input3, face3, normal3, texture3);
 
-      cout << "before add face vertices" << endl;
-
       addFaceVertex(vertices, points, normals, vn,
         textures, vt,
         atoi(face1.c_str()), atof(normal1.c_str()),
@@ -353,8 +364,6 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
         textures, vt,
         atoi(face3.c_str()), atof(normal3.c_str()),
         atof(texture3.c_str()));
-
-      cout << "after add face vertices" << endl;
     }
   }
 }
@@ -381,12 +390,8 @@ void Model::load(string objFileName) {
 
   int count = 0;
 
-  cout << "before readOBJ file " << endl;
-
   readOBJFile(inputFile, points, vn, vt, vertices, normals, materials,
     textures, texture, materialIDs, material_vertex_map);
-
-  cout << "readOBJ done" << endl;
 
   bool is_textured = false;
   bool is_shaded = false;
@@ -407,25 +412,20 @@ void Model::load(string objFileName) {
   }
 
   if (success) {
-    cout << "success" << endl;
     number_of_vertices = vertices.size();
     int buffer_size = number_of_vertices * BYTES_PER_FLOAT;
-    cout << "material_vertex_map.size() = " << material_vertex_map.size() << endl;
     for (int i = 0; i < material_vertex_map.size(); i ++) {
 
-      cout << "inside main loop" << endl;
 
       GLfloat * verticeArray = new GLfloat[vertices.size()];
       GLfloat * normalArray = new GLfloat[normals.size()];
       GLfloat * textureArray = new GLfloat[textures.size()];
 
-      cout << "after array creation" << endl;
 
       copyVectorToArray(vertices,verticeArray,material_vertex_map,i);
       copyVectorToArray(normals,normalArray,material_vertex_map,i);
       copyVectorToArray(textures,textureArray,material_vertex_map,i);
 
-      cout << "after array copy" << endl;
 
       int size = 0;
 
@@ -461,28 +461,32 @@ void Model::load(string objFileName) {
           normalArray, GL_STATIC_DRAW);
 
       int texture_size = textures.size();
-      cout << texture_size << endl;
 
       glGenBuffers(1, &temp_tex_coord_buffer_id);
       tex_coord_buffer_id.push_back(temp_tex_coord_buffer_id);
       glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id.at(i));
-      glBufferData(GL_ARRAY_BUFFER, texture_size * BYTES_PER_FLOAT, textureArray, GL_STATIC_DRAW);
+      if (1 == 1 || is_textured) {
+        glBufferData(GL_ARRAY_BUFFER, texture_size * BYTES_PER_FLOAT, textureArray, GL_STATIC_DRAW);
+      }
+      // else {
+      //   textureArray = new GLfloat[100];
+      //   for (int i = 0; i < textureArray; i ++) {
+
+      //   }
+      // }
       
-      cout << "after genbuffers" << endl;
+      
 
       delete[] verticeArray;
       delete[] normalArray;
       delete[] textureArray;
 
-      cout << "after delete" << endl;
     }
 
-    cout << "size: " << vertices.size() << endl;
 
-    cout << "vertices.size() - 3 = " << vertices.size() - 3 << endl;
 
     for (int i = 0; i < vertices.size() - 3; i += 3) {
-      cout << "in for loop" << endl;
+      //cout << "in for loop" << endl;
       GLfloat currx = vertices.at(i);
       GLfloat curry = vertices.at(i + 1);
       GLfloat currz = vertices.at(i + 2);
@@ -516,10 +520,13 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
   glEnableVertexAttribArray(normal_id);
   glEnableVertexAttribArray(tex_coord_id);
 
+
   for (int i = 0; i < materialIDs.size(); i ++) {
     int current_material_id = materialIDs.at(i);
 
+
     Material * material = &(materials.at(current_material_id));
+
 
     GLfloat * Ka = material->get_Ka();
     GLfloat * Kd = material->get_Kd();
@@ -527,6 +534,9 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
     GLfloat Ns = material->get_Ns();
     bool has_texture = material->has_texture();
     if (has_texture) {
+
+      glUniform1i(is_textured_id, 1);
+
       unsigned char * texture = material->get_texture();
 
       GLfloat tex_width = material->get_tex_width();
@@ -543,16 +553,23 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
       glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 
         0, NULL);
     }
+    else {
+      glUniform1i(is_textured_id, 0);
+    }
+
 
     glUniform4f(ambient_id, Ka[0], Ka[1], Ka[2], 1.0f);
     glUniform4f(diffuse_id, Kd[0], Kd[1], Kd[2], 1.0f);
     glUniform4f(specular_id, Ks[0], Ks[1], Ks[2], 1.0f);
     glUniform1f(specular_coefficient_id, Ns);
     glUniform1i(texture_sampler_id, 0);
+    glUniform1f(transparency_id, material->get_transparency());
+
 
     Matrix model_view_matrix = view_matrix * model_matrix;
     Matrix model_view_projection_matrix = projection_matrix * model_view_matrix;
     Matrix normal_matrix = model_view_matrix.normalMatrix();
+
 
     glUniformMatrix4fv(model_view_projection_matrix_id, 1, GL_TRUE, model_view_projection_matrix.data());
     glUniformMatrix4fv(model_view_matrix_id, 1, GL_TRUE, model_view_matrix.data());
@@ -568,12 +585,16 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
     glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 
       0, NULL);
 
+
+
     glDrawArrays(GL_TRIANGLES, 0, sizes.at(i));
+
   }
 
   glDisableVertexAttribArray(vertex_id);
   glDisableVertexAttribArray(normal_id);
   glDisableVertexAttribArray(tex_coord_id);
+
 }
 
 // Deletes the buffers from memory

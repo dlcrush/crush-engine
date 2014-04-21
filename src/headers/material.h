@@ -22,6 +22,7 @@ private:
 	unsigned char * texture;
 	GLfloat tex_height;
 	GLfloat tex_width;
+	GLfloat transparency;
 public:
 
 	// Constructor
@@ -32,6 +33,9 @@ public:
 
 	// Clears the material's properties
 	void clear();
+
+	// updates the transparency value
+	void set_transparency(GLfloat transparency);
 
 	// updates the name of the material
 	void set_name(string mtlName);
@@ -63,6 +67,8 @@ public:
 	GLfloat get_tex_height();
 
 	GLfloat get_tex_width();
+
+	GLfloat get_transparency();
 
 	// returns the name of the material
 	string get_name();

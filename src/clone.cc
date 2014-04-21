@@ -23,21 +23,21 @@ Clone::Clone(Model * model, Camera * camera) {
 	maxz = model->get_max_z();
 	Vector * temp_vector;
 	temp_vector = new Vector(minx, miny, minz);
-	vertices.push_back(*temp_vector);
+	vectors.push_back(*temp_vector);
 	temp_vector = new Vector(minx, miny, maxz);
-	vertices.push_back(*temp_vector);
-	temp_vector = new Vector(minx, maxy, maxz);
-	vertices.push_back(*temp_vector);
-	temp_vector = new Vector(maxx, maxy, maxz);
-	vertices.push_back(*temp_vector);
-	temp_vector = new Vector(maxx, maxy, minz);
-	vertices.push_back(*temp_vector);
-	temp_vector = new Vector(maxx, miny, minz);
-	vertices.push_back(*temp_vector);
+	vectors.push_back(*temp_vector);
 	temp_vector = new Vector(maxx, miny, maxz);
-	vertices.push_back(*temp_vector);
+	vectors.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, miny, minz);
+	vectors.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, maxy, minz);
+	vectors.push_back(*temp_vector);
 	temp_vector = new Vector(minx, maxy, minz);
-	vertices.push_back(*temp_vector);
+	vectors.push_back(*temp_vector);
+	temp_vector = new Vector(minx, maxy, maxz);
+	vectors.push_back(*temp_vector);
+	temp_vector = new Vector(maxx, maxy, maxz);
+	vectors.push_back(*temp_vector);
 
 	// for (int i = 0; i < 8; i ++) {
 	// 	cout << vertices.at(i) << endl;
@@ -47,7 +47,7 @@ Clone::Clone(Model * model, Camera * camera) {
 	Vector vector1(2.0f, 8.0f, 4.0f);
 	float data[4][4] = {{1.000,2.000, 3.000, 4.000}, {4.000,3.000, 2.000, 1.000}, {3.000, 2.000, 4.000, 1.000}, {2.000, 4.000, 1.000, 3.000}};
 	Matrix matrix1(data);
-	cout << vector1 * matrix1 << endl;
+	//cout << vector1 * matrix1 << endl;
 
 }
 
@@ -56,6 +56,20 @@ Clone::Clone(Model * model, Camera * camera) {
 Clone::~Clone() {
 	// there is nothing to do
 	
+}
+
+vector<Vector> Clone::getVectors() {
+	vector<Vector> updatedVectors = vectors;
+
+	for (int i = 0; i < updatedVectors.size(); i ++) {
+		//Matrix temp_matrix = Matrix::identity() * translate_matrix * rotate_matrix * scale_matrix;
+		Matrix view_matrix = camera->getViewMatrix();
+		Matrix model_view_matrix = model_matrix * view_matrix;
+		//cout << model_view_matrix << endl;
+		updatedVectors.at(i) = updatedVectors.at(i) * model_view_matrix;
+	}
+
+	return updatedVectors;
 }
 
 // Draws clone

@@ -10,6 +10,7 @@ uniform float attenuation_factor_1f; // distance attenuation scale factor
 uniform bool is_textured_b; // whether to apply texture map
 uniform bool is_shaded_b;   // whether to apply light shading
 uniform sampler2D textureSampler;
+uniform float transparency_coefficient_1f;
 
 varying vec3 position; // vertex position, camera space
 varying vec3 normal;   // vertex normal, camera space
@@ -23,6 +24,7 @@ void main() {
   if (is_textured_b) {
     texture_color = texture2D(textureSampler, texture);
     gl_FragColor = texture_color;
+    gl_FragColor.a = transparency_coefficient_1f;
   }
   if (is_shaded_b) {
     float NdotL = max(dot(normal, light), 0.0);
@@ -35,6 +37,7 @@ void main() {
     vec4 specular_intensity = pow(VdotR, specular_coefficient_1f) * specular_color_4f;
     vec4 intensity = ambient_intensity + diffuse_intensity + specular_intensity;
     gl_FragColor = attenuation * light_color_4f * intensity;
+    gl_FragColor.a = transparency_coefficient_1f;
   }
 }
 
