@@ -62,6 +62,7 @@ public:
 		glfwSwapInterval(1);
 
 		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+		glClearColor(0.52f, 0.8f, 0.97f, 0.0f);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 

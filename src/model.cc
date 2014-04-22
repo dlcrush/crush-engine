@@ -288,7 +288,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
     string type;
     inputFile >> type;
     if (type.compare("v") == 0) {
-      
+
       // read in vertice (should be 3 float values)
       GLfloat point1, point2, point3;
 
@@ -299,6 +299,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       points.push_back(point3);
     }
     else if (type.compare("vn") == 0) {
+
       GLfloat vn1, vn2, vn3;
 
       inputFile >> vn1 >> vn2 >> vn3;
@@ -308,6 +309,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       vn.push_back(vn3);
     }
     else if (type.compare("vt") == 0) {
+
       GLfloat vt1, vt2;
 
       inputFile >> vt1 >> vt2;
@@ -316,6 +318,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       vt.push_back(vt2);
     }
     else if (type.compare("mtllib") == 0) {
+
       string mtlFile;
 
       inputFile >> mtlFile;
@@ -325,6 +328,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       loadMtlFile(mtlFile, materials, texture, tex_width, tex_height);
     }
     else if (type.compare("usemtl") == 0) {
+
       string mtlName;
 
       inputFile >> mtlName;
@@ -342,6 +346,7 @@ void Model::readOBJFile(ifstream & inputFile, vector<GLfloat> &points,
       }
     }
     else if (type.compare("f") == 0) {
+
       string input1, input2, input3;
       string face1, face2, face3;
       string normal1, normal2, normal3;
@@ -499,14 +504,14 @@ void Model::load(string objFileName) {
       updateMax(maxz, currz);
     }
     
-    cout << "minx: " << minx << endl;
-    cout << "maxx: " << maxx << endl;
+    // cout << "minx: " << minx << endl;
+    // cout << "maxx: " << maxx << endl;
 
-    cout << "miny: " << miny << endl;
-    cout << "maxy: " << maxy << endl;
+    // cout << "miny: " << miny << endl;
+    // cout << "maxy: " << maxy << endl;
 
-    cout << "minz: " << minz << endl;
-    cout << "maxz: " << maxz << endl;
+    // cout << "minz: " << minz << endl;
+    // cout << "maxz: " << maxz << endl;
   }
 }
 
@@ -516,6 +521,8 @@ void Model::load(string objFileName) {
 // POST: The model has been drawn to the screen. 
 void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matrix) {
   
+  //cout << view_matrix << endl;
+
   glEnableVertexAttribArray(vertex_id);
   glEnableVertexAttribArray(normal_id);
   glEnableVertexAttribArray(tex_coord_id);
@@ -548,6 +555,8 @@ void Model::draw(Matrix projection_matrix, Matrix view_matrix, Matrix model_matr
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
       glBindBuffer(GL_ARRAY_BUFFER, tex_coord_buffer_id.at(i));
       glVertexAttribPointer(tex_coord_id, 2, GL_FLOAT, GL_FALSE, 

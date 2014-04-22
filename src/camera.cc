@@ -27,6 +27,9 @@ void Camera::rotate(float x, float y, float z) {
 
 // Returns the view_matrix for the camera
 Matrix Camera::getViewMatrix() {
+	//cout << translate_matrix << endl;
+	//cout << rotate_matrix << endl;
 	view_matrix = translate_matrix * rotate_matrix;
+	//cout << view_matrix << endl;
 	return view_matrix;
 }

@@ -63,6 +63,7 @@ vector<Vector> Clone::getVectors() {
 
 	for (int i = 0; i < updatedVectors.size(); i ++) {
 		//Matrix temp_matrix = Matrix::identity() * translate_matrix * rotate_matrix * scale_matrix;
+		model_matrix = translate_matrix * rotate_matrix * scale_matrix;
 		Matrix view_matrix = camera->getViewMatrix();
 		Matrix model_view_matrix = model_matrix * view_matrix;
 		//cout << model_view_matrix << endl;
